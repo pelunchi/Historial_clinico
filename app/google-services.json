@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "745862357247",
+    "project_id": "historial-clinica-23151",
+    "storage_bucket": "historial-clinica-23151.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:745862357247:android:a00d03a89f63751e4becca",
+        "android_client_info": {
+          "package_name": "com.example.historialclinico"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdo3jrKkPjg-guKgu7n5EjAFHsyX6tzsM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

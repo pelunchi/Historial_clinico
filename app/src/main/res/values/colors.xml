@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Morados principales (estilo StreakFree) -->
+    <color name="purple_dark">#2D1B69</color>
+    <color name="purple_card">#4A3480</color>
+    <color name="purple_inactive">#4A3480</color>
+    <color name="purple_selected">#6B4FA0</color>
+    <color name="gray_background">#7A60AC</color>
+
+    <!-- Colores de sección para encabezados de CardView -->
+    <color name="section_ficha">#1976D2</color>
+    <color name="section_ahf">#00838F</color>
+    <color name="section_app">#37474F</color>
+    <color name="section_pa">#6A1B9A</color>
+    <color name="section_ef">#2E7D32</color>
+    <color name="section_trat">#E65100</color>
+
+    <!-- Estado -->
+    <color name="green_completed">#4CAF50</color>
+    <color name="red_failed">#D32F2F</color>
+
+    <!-- Material -->
+    <color name="colorPrimary">#8B5FBF</color>
+    <color name="colorPrimaryDark">#2D1B69</color>
+    <color name="colorAccent">#2ECC40</color>
+</resources>
