@@ -15,7 +15,6 @@ import kotlinx.coroutines.tasks.await
  *       {id_expediente}/ ← campos del Expediente
  */
 class ExpedienteRepository {
-
     private val auth = FirebaseAuth.getInstance()
     private val db   = FirebaseDatabase.getInstance().reference
 

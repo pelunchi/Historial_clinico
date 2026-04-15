@@ -2,18 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_home"
-        android:icon="@android:drawable/ic_menu_today"
-        android:title="Inicio" />
+        android:id="@+id/nav_inicio"
+        android:title="Inicio"/>
 
     <item
-        android:id="@+id/nav_expediente"
-        android:icon="@android:drawable/ic_menu_edit"
-        android:title="Expediente" />
+        android:id="@+id/nav_pacientes"
+        android:title="Pacientes"/>
 
     <item
-        android:id="@+id/nav_profile"
-        android:icon="@android:drawable/ic_menu_myplaces"
-        android:title="Perfil" />
+        android:id="@+id/nav_ajustes"
+        android:title="Ajustes"/>
 
 </menu>

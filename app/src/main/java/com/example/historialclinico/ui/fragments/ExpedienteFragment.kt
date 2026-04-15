@@ -90,7 +90,6 @@ class ExpedienteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.setBackgroundResource(PreferencesManager(requireContext()).getThemeDrawable())
         initViews(view)
         setupSexoDropdown()
         setupDatePickers()

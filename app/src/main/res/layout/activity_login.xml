@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginBottom="20dp"
-            android:background="@color/purple_dark"
+            android:background="@color/avatar_purple"
             android:padding="4dp"
             android:weightSum="2">
 
@@ -59,7 +59,7 @@
                 android:text="Iniciar Sesión"
                 android:textSize="13sp"
                 android:textColor="#FFFFFF"
-                android:background="@color/purple_selected" />
+                android:background="@color/avatar_purple" />
 
             <Button
                 android:id="@+id/btnTabRegister"
@@ -81,7 +81,7 @@
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="8dp"
-            app:cardBackgroundColor="@color/purple_card">
+            app:cardBackgroundColor="@color/avatar_purple">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -158,7 +158,7 @@
             android:visibility="gone"
             app:cardCornerRadius="16dp"
             app:cardElevation="8dp"
-            app:cardBackgroundColor="@color/purple_card">
+            app:cardBackgroundColor="@color/avatar_purple">
 
             <LinearLayout
                 android:layout_width="match_parent"

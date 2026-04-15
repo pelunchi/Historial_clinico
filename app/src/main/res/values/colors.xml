@@ -11,6 +11,14 @@
     <color name="purple_selected">#6B4FA0</color>
     <color name="gray_background">#7A60AC</color>
 
+    <!-- Colores Main Prueba1 -->
+    <color name="background">#FFFFFF</color>
+    <color name="header_bg">#FFFFFF</color>
+    <color name="nav_inactive">#6B7280</color>
+    <color name="nav_active">#1D9E75</color>
+    <color name="primary1">#378ADD</color>
+    <color name="primary2">#7F77DD</color>
+
     <!-- Colores de sección para encabezados de CardView -->
     <color name="section_ficha">#1976D2</color>
     <color name="section_ahf">#00838F</color>
@@ -23,8 +31,58 @@
     <color name="green_completed">#4CAF50</color>
     <color name="red_failed">#D32F2F</color>
 
-    <!-- Material -->
-    <color name="colorPrimary">#8B5FBF</color>
-    <color name="colorPrimaryDark">#2D1B69</color>
-    <color name="colorAccent">#2ECC40</color>
+    <!-- Primary -->
+    <color name="primary">#2ECC71</color>
+    <color name="primary_dark">#27AE60</color>
+    <color name="primary_light">#A8E6CF</color>
+    <color name="primary_bg">#FFFFFF</color>
+
+    <!-- Texto -->
+    <color name="text_primary">#1F2937</color>
+    <color name="text_secondary">#2F3E5D</color>
+    <color name="text_tertiary">#6B7280</color>
+    <color name="text_blue">#378ADD</color>
+    <color name="text_purple">#7F77DD</color>
+    <color name="text_hint">#BDC3C7</color>
+    <color name="text_white">#FFFFFF</color>
+    <color name="text_green">#27AE60</color>
+    <color name="text_red">#E74C3C</color>
+
+    <!-- Fondos -->
+    <color name="fondo_principal">#F8F8F8</color>
+    <color name="fondo_secundario">#FFFFFF</color>
+    <color name="bg_page">#F5F6FA</color>
+    <color name="bg_white">#FFFFFF</color>
+    <color name="bg_header">#DFF5EB</color>
+
+    <!-- Inputs -->
+    <color name="input_border">#E8E8E8</color>
+    <color name="input_bg">#F9FAFB</color>
+    <color name="divider">#F0F0F0</color>
+
+    <!-- Botones -->
+    <color name="btn_primary">#2ECC71</color>
+    <color name="btn_danger">#DD3636</color>
+
+    <!-- Nav Bottom -->
+    <color name="nav_selected">#1D9E75</color>
+    <color name="nav_unselected">#6B7280</color>
+    <color name="nav_bg">#FFFFFF</color>
+
+    <!-- Tabs -->
+    <color name="tab_selected_bg">#2ECC71</color>
+    <color name="tab_unselected_bg">#FFFFFF</color>
+    <color name="tab_selected_text">#FFFFFF</color>
+    <color name="tab_unselected_text">#7F8C8D</color>
+
+    <!-- Avatares -->
+    <color name="avatar_yellow">#E5C683</color>
+    <color name="avatar_purple">#C092DF</color>
+    <color name="avatar_red">#C57B85</color>
+    <color name="avatar_blue">#83AAE5</color>
+    <color name="avatar_green">#88C57B</color>
+
+    <!-- Chip fecha consulta -->
+    <color name="chip_date_bg">#EAF4FF</color>
+    <color name="chip_date_text">#2980B9</color>
 </resources>
