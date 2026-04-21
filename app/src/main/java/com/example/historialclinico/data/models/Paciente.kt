@@ -1,17 +1,17 @@
 package com.example.historialclinico.data.models
 
 import com.example.historialclinico.R
+import java.io.Serializable
 
 data class Paciente(
-    val id: String,
-    val nombre: String,
-    val edad: Int,
-    val sexo: String,        // "M" o "F"
-    val tipoSangre: String,
-    val avatarColorRes: Int = R.color.avatar_blue // valor por defecto
+    val id: String = "",
+    val nombre: String = "",
+    val edad: Int = 0,
+    val sexo: String = "",
+    val tipoSangre: String = "",
+    val avatarColorRes: Int = R.color.avatar_blue
+) : Serializable {
 
-) {
-    // Genera las iniciales para el avatar a partir del nombre
     val iniciales: String
         get() {
             val partes = nombre.trim().split(" ")

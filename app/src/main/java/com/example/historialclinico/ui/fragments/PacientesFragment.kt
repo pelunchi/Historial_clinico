@@ -8,8 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.historialclinico.R
 import com.example.historialclinico.data.models.Paciente
 import com.example.historialclinico.databinding.FragmentPacientesBinding
+import com.example.historialclinico.ui.activities.MainActivity
 import com.example.historialclinico.ui.adapters.PacientesAdapter
 import com.example.historialclinico.ui.utils.AvatarColorHelper
 
@@ -20,7 +22,7 @@ class PacientesFragment : Fragment() {
 
     private lateinit var adapter: PacientesAdapter
     private val listaPacientes = mutableListOf<Paciente>()
-    private val listaFiltrada = mutableListOf<Paciente>()
+    private val listaFiltrada  = mutableListOf<Paciente>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,22 +44,33 @@ class PacientesFragment : Fragment() {
     private fun cargarDatosDePrueba() {
         listaPacientes.addAll(
             listOf(
-                Paciente("1", "María González", 45, "F", "O+", avatarColorRes = AvatarColorHelper.colorAleatorio()),
-                Paciente("2", "Carlos Pérez", 32, "M", "A+", avatarColorRes = AvatarColorHelper.colorAleatorio()),
-                Paciente("3", "Lucía Ramírez", 28, "F", "B-",avatarColorRes = AvatarColorHelper.colorAleatorio()),
+                Paciente("1", "María González", 45, "F", "O+",
+                    avatarColorRes = AvatarColorHelper.colorAleatorio()),
+                Paciente("2", "Carlos Pérez",   32, "M", "A+",
+                    avatarColorRes = AvatarColorHelper.colorAleatorio()),
+                Paciente("3", "Lucía Ramírez",  28, "F", "B-",
+                    avatarColorRes = AvatarColorHelper.colorAleatorio()),
             )
         )
         listaFiltrada.addAll(listaPacientes)
     }
 
-        private fun configurarRecyclerView() {
-            adapter = PacientesAdapter(listaFiltrada) { paciente ->
-                // Navegar al detalle del paciente
-                // findNavController().navigate(...)
-            }
-            binding.rvPacientes.layoutManager = LinearLayoutManager(requireContext())
-            binding.rvPacientes.adapter = adapter
+    private fun configurarRecyclerView() {
+        adapter = PacientesAdapter(listaFiltrada) { paciente ->
+            // 👇 Al hacer click en un paciente, abrimos su perfil
+            navegarAPerfilPaciente(paciente)
         }
+        binding.rvPacientes.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvPacientes.adapter = adapter
+    }
+
+    private fun navegarAPerfilPaciente(paciente: Paciente) {
+        val fragment = PacientePerfilFragment.newInstance(paciente)
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, fragment)  // usa el ID de tu contenedor
+            .addToBackStack(null)
+            .commit()
+    }
 
     private fun configurarBusqueda() {
         binding.etBuscar.addTextChangedListener(object : TextWatcher {
@@ -85,12 +98,11 @@ class PacientesFragment : Fragment() {
 
     private fun configurarBotones() {
         binding.btnNuevoPaciente.setOnClickListener {
-            // Abrir formulario de nuevo paciente
-            // findNavController().navigate(...)
+            (requireActivity() as MainActivity).navegarAExpediente(pacienteId = null)
         }
 
         binding.btnEliminar.setOnClickListener {
-            // Lógica de eliminación (selección múltiple o diálogo)
+            // lógica de eliminación
         }
     }
 

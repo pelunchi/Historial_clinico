@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import com.example.historialclinico.R
+import com.example.historialclinico.ui.activities.MainActivity
 import com.example.historialclinico.utils.PreferencesManager
 
 class InicioFragment : Fragment() {
@@ -52,8 +53,8 @@ class InicioFragment : Fragment() {
 
         // ➕ Botón nuevo paciente
         btnNuevoPaciente.setOnClickListener {
-            Toast.makeText(requireContext(), "Nuevo paciente", Toast.LENGTH_SHORT).show()
-            // Aquí luego navegas a otro fragment
+            (requireActivity() as MainActivity)
+                .navegarAExpediente(pacienteId = null)
         }
     }
 
