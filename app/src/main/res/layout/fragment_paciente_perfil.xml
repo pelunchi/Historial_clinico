@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/fondo_principal">
+    android:background="@color/fondo_principal"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
     <!-- Header -->
     <LinearLayout
@@ -15,6 +17,8 @@
         android:paddingTop="35dp"
         android:paddingBottom="8dp"
         android:background="#FFFFFF"
+
+        android:elevation="4dp"
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,6 +53,8 @@
         android:orientation="vertical"
         android:background="#FFFFFF"
         android:paddingBottom="3dp"
+
+        android:elevation="4dp"
 
         app:layout_constraintTop_toBottomOf="@id/header_perfil_paciente"
         app:layout_constraintStart_toStartOf="parent"
@@ -107,7 +113,7 @@
                     android:layout_marginTop="2dp"
                     android:text="45 años | F | O+"
                     android:textColor="@color/text_tertiary"
-                    android:textSize="13sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -128,7 +134,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Expediente"
-                android:textSize="14sp"
+                android:textSize="15sp"
+                android:textAllCaps="false"
                 android:backgroundTint="#1D9E75"
                 android:textColor="#FFFFFF"
                 android:layout_marginEnd="4dp"
@@ -140,7 +147,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Consultas"
-                android:textSize="14sp"
+                android:textSize="15sp"
+                android:textAllCaps="false"
                 android:backgroundTint="#E8F5E9"
                 android:textColor="#2E7D32"
                 android:layout_marginStart="4dp"
@@ -176,6 +184,7 @@
                 android:orientation="vertical"
                 android:paddingTop="10dp"
                 android:paddingHorizontal="20dp"
+                android:paddingBottom="100dp"
                 android:visibility="visible">
 
                 <TextView
@@ -187,6 +196,7 @@
                     android:textColor="#1A1A1A"
                     android:layout_marginBottom="8dp"/>
 
+                <!-- Contenedor Información de contacto -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -195,6 +205,7 @@
                     android:padding="12dp"
                     android:layout_marginBottom="16dp">
 
+                    <!-- Telefono -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -206,11 +217,12 @@
                         android:id="@+id/tvPhone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp"
-                        android:text="No hay número registrado"
+                        android:layout_marginBottom="8dp"
+                        android:text="No hay un número registrado"
                         android:textColor="#1A1A1A"
                         android:textSize="14sp" />
 
+                    <!-- Email -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -222,7 +234,41 @@
                         android:id="@+id/tvEmail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="No hay email registrado"
+                        android:text="No hay un email registrado"
+                        android:textSize="14sp"
+                        android:textColor="#1A1A1A"
+                        android:layout_marginBottom="8dp"/>
+
+                    <!-- Fecha de nacimiento -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fecha de nacimiento"
+                        android:textSize="12sp"
+                        android:textColor="#888888"/>
+
+                    <TextView
+                        android:id="@+id/tvFechaNacimiento"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="DD/MM/AAAA"
+                        android:textSize="14sp"
+                        android:textColor="#1A1A1A"
+                        android:layout_marginBottom="8dp"/>
+
+                    <!-- CURP -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CURP"
+                        android:textSize="12sp"
+                        android:textColor="#888888"/>
+
+                    <TextView
+                        android:id="@+id/tvCURP"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sin registrar"
                         android:textSize="14sp"
                         android:textColor="#1A1A1A"/>
                 </LinearLayout>
@@ -236,6 +282,7 @@
                     android:textColor="#1A1A1A"
                     android:layout_marginBottom="8dp"/>
 
+                <!-- Contenedor Datos Antropométricos -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -250,65 +297,70 @@
                         android:orientation="horizontal"
                         android:layout_marginBottom="8dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Altura:  "
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="#1A1A1A"/>
-
-                        <TextView
-                            android:id="@+id/tvAltura"
+                        <!-- Altura -->
+                        <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Sin medir aún"
-                            android:textSize="14sp"
-                            android:textColor="#1A1A1A"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Peso:  "
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="#1A1A1A"/>
+                            android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/tvPeso"
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Altura  "
+                                android:textSize="14sp"
+                                android:textColor="#B49A45"/>
+
+                            <TextView
+                                android:id="@+id/tvAltura"
+                                android:layout_height="wrap_content"
+                                android:layout_width="wrap_content"
+                                android:text="Sin medir aún"
+                                android:textSize="14sp"
+                                android:textColor="#1A1A1A"/>
+
+                        </LinearLayout>
+
+                        <!-- Peso -->
+                        <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Sin pesar aún"
-                            android:textSize="14sp"
-                            android:textColor="#1A1A1A"/>
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Peso"
+                                android:textSize="14sp"
+                                android:textColor="#B49A45" />
+
+                            <TextView
+                                android:id="@+id/tvPeso"
+                                android:layout_height="wrap_content"
+                                android:layout_width="wrap_content"
+                                android:text="Sin pesar aún"
+                                android:textSize="14sp"
+                                android:textColor="#1A1A1A"/>
+                        </LinearLayout>
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <!-- IMC -->
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:text="IMC"
+                        android:textSize="14sp"
+                        android:textColor="#B49A45" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="IMC:  "
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="#1A1A1A"/>
+                    <TextView
+                        android:id="@+id/tvIMC"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
 
-                        <TextView
-                            android:id="@+id/tvIMC"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="S/N"
-                            android:textSize="14sp"
-                            android:textColor="#1A1A1A"/>
-                    </LinearLayout>
-
-
+                        android:text="S/N"
+                        android:textColor="#1A1A1A"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <TextView
@@ -320,135 +372,121 @@
                     android:textColor="#1A1A1A"
                     android:layout_marginBottom="8dp"/>
 
+                <!-- Contenedor Antecedentes Medicos-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:background="@drawable/fondo_info_expediente"
+                    android:background="@drawable/fondo_info_antecedentes_medicos"
                     android:padding="12dp"
                     android:layout_marginBottom="24dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <!-- Antecedentes heredofamiliares -->
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="8dp">
+                        android:text="Antecedentes heredofamiliares"
+                        android:textSize="14sp"
+                        android:textColor="#C8793D" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Antecedentes heredofamiliares:  "
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="#1A1A1A"/>
-
-                        <TextView
-                            android:id="@+id/tvAntecedentesHeredofamiliares"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Ninguno"
-                            android:textSize="14sp"
-                            android:textColor="#1A1A1A"/>
-
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/tvAntecedentesHeredofamiliares"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="8dp">
+                        android:lineSpacingExtra="2dp"
+                        android:text="Ninguno"
+                        android:textColor="#1A1A1A"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="8dp"/>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Cirugias previas:  "
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="#1A1A1A"/>
-
-                        <TextView
-                            android:id="@+id/tvCirugiasPrevias"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Ninguna"
-                            android:textSize="14sp"
-                            android:textColor="#1A1A1A"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <!-- Cirugias previas -->
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="8dp">
+                        android:text="Cirugias previas"
+                        android:textSize="14sp"
+                        android:textColor="#C8793D" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Alergias:  "
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="#1A1A1A"/>
-
-                        <TextView
-                            android:id="@+id/tvAlergias"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Ninguna"
-                            android:textSize="14sp"
-                            android:textColor="#1A1A1A"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/tvCirugiasPrevias"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="8dp">
+                        android:lineSpacingExtra="2dp"
+                        android:text="Ninguna"
+                        android:textColor="#1A1A1A"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="8dp"/>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Enfermedades crónicas:  "
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="#1A1A1A"/>
-
-                        <TextView
-                            android:id="@+id/tvEnfermedadesCronicas"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Ninguna"
-                            android:textSize="14sp"
-                            android:textColor="#1A1A1A"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <!-- Alergias -->
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="8dp">
+                        android:text="Alergias"
+                        android:textSize="14sp"
+                        android:textColor="#C8793D" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Hospitalizaciones previas:  "
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="#1A1A1A"/>
+                    <TextView
+                        android:id="@+id/tvAlergias"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="2dp"
+                        android:text="Ninguna"
+                        android:textColor="#1A1A1A"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="8dp"/>
 
-                        <TextView
-                            android:id="@+id/tvHospitalizacionesPrevias"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Ninguna"
-                            android:textSize="14sp"
-                            android:textColor="#1A1A1A"/>
-                    </LinearLayout>
+                    <!-- Enfermedades crónicas -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Enfermedades crónicas"
+                        android:textSize="14sp"
+                        android:textColor="#C8793D" />
+
+                    <TextView
+                        android:id="@+id/tvEnfermedadesCronicas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="2dp"
+                        android:text="Ninguna"
+                        android:textColor="#1A1A1A"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="8dp"/>
+
+                    <!-- Hospitalizaciones previas -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hospitalizaciones previas"
+                        android:textSize="14sp"
+                        android:textColor="#C8793D" />
+
+                    <TextView
+                        android:id="@+id/tvHospitalizacionesPrevias"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="2dp"
+                        android:text="Ninguna"
+                        android:textColor="#1A1A1A"
+                        android:textSize="14sp" />
+
+                    <!-- Otros... -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Otros"
+                        android:textColor="#C8793D"
+                        android:visibility="visible"/>
+
+                    <TextView
+                        android:id="@+id/tvOtrosAntecedentes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sin información"
+                        android:lineSpacingExtra="2dp"
+                        android:textSize="14sp"
+                        android:textColor="#1A1A1A"/>
 
                 </LinearLayout>
             </LinearLayout>
@@ -459,14 +497,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingHorizontal="16dp"
+                android:clipToPadding="false"
+                android:clipChildren="false"
                 android:visibility="gone">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvConsultas"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvConsultas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="50dp"
+                android:clipToPadding="false"
+                android:clipChildren="false"
+                android:nestedScrollingEnabled="false"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -478,15 +522,15 @@
         style="@style/ButtonSecondary"
         android:layout_width="0dp"
         android:layout_height="42dp"
-        android:text="Editar expediente"
+        android:text="Editar Expediente"
         android:textSize="16dp"
-        android:textAllCaps="true"
+        android:textAllCaps="false"
         android:elevation="10dp"
         app:backgroundTint="@null"
 
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="10dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -497,9 +541,9 @@
         android:id="@+id/btnNuevaConsulta"
         style="@style/ButtonPrimary"
         android:layout_width="0dp"
-        android:layout_height="52dp"
-        android:text="+  Nuevo paciente"
-        android:textSize="16sp"
+        android:layout_height="47dp"
+        android:text="+  Nueva consulta"
+        android:textSize="18sp"
         android:textAllCaps="false"
         android:elevation="10dp"
         app:backgroundTint="@null"
@@ -507,7 +551,7 @@
 
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="10dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

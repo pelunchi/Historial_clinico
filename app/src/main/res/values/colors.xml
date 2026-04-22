@@ -20,12 +20,11 @@
     <color name="primary2">#7F77DD</color>
 
     <!-- Colores de sección para encabezados de CardView -->
-    <color name="section_ficha">#1976D2</color>
-    <color name="section_ahf">#00838F</color>
-    <color name="section_app">#37474F</color>
+    <color name="section_ficha">#3297CA</color>
+    <color name="section_ahf">#EE9958</color>
+    <color name="section_app">#8954E5</color>
     <color name="section_pa">#6A1B9A</color>
-    <color name="section_ef">#2E7D32</color>
-    <color name="section_trat">#E65100</color>
+    <color name="section_ef">#F0A151</color>
 
     <!-- Estado -->
     <color name="green_completed">#4CAF50</color>

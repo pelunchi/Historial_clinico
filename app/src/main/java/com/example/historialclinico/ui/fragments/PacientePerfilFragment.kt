@@ -9,9 +9,14 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.historialclinico.R
 import com.example.historialclinico.data.models.Paciente
+import com.example.historialclinico.ui.adapters.ConsultaSimulada
+import com.example.historialclinico.ui.adapters.ConsultasAdapter
 import com.google.android.material.button.MaterialButton
 
 class PacientePerfilFragment : Fragment() {
@@ -60,6 +65,7 @@ class PacientePerfilFragment : Fragment() {
 
         enlazarVistas(view)
         llenarDatosPaciente(view)
+        configurarListaConsultas(view)
         configurarBotones()
         mostrarExpediente() // Expediente activo por defecto
     }
@@ -86,6 +92,26 @@ class PacientePerfilFragment : Fragment() {
             "${paciente.edad} años | ${paciente.sexo} | ${paciente.tipoSangre}"
     }
 
+    // ----------------------------------------------------------------
+    // RecyclerView con datos simulados
+    // ----------------------------------------------------------------
+    private fun configurarListaConsultas(view: View) {
+        val consultasSimuladas = listOf(
+            ConsultaSimulada("1", "08 Abril 2026",      "10:30 AM", "Dolor de cabeza recurrente"),
+            ConsultaSimulada("2", "02 Enero 2026",      "2:04 PM",  "Control de presión arterial"),
+            ConsultaSimulada("3", "10 Octubre 2025",    "6:24 PM",  "Dolor de garganta regular"),
+            ConsultaSimulada("4", "26 Septiembre 2025", "12:14 PM", "Control de presión arterial"),
+            ConsultaSimulada("5", "16 Junio 2025",      "10:45 AM", "Rinitis")
+        )
+
+        val rv = view.findViewById<RecyclerView>(R.id.rvConsultas)
+        rv.layoutManager = LinearLayoutManager(requireContext())
+        rv.adapter = ConsultasAdapter(consultasSimuladas) { consulta ->
+            // Por ahora solo muestra un Toast — aquí irá la navegación después
+            Toast.makeText(requireContext(), "Consulta: ${consulta.motivo}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun configurarBotones() {
         view?.findViewById<ImageButton>(R.id.btnBack)?.setOnClickListener {
             parentFragmentManager.popBackStack()
@@ -94,7 +120,6 @@ class PacientePerfilFragment : Fragment() {
         btnExpediente.setOnClickListener { mostrarExpediente() }
         btnConsultas.setOnClickListener  { mostrarConsultas()  }
 
-        // Por ahora sin acción — se implementan después
         btnEditarExpediente.setOnClickListener { }
         btnNuevaConsulta.setOnClickListener    { }
     }

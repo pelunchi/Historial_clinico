@@ -75,9 +75,6 @@ class MainActivity : AppCompatActivity() {
     // 🔥 AQUÍ YA NO USAMOS binding NI funciones que no existen
     fun navegarAExpediente(pacienteId: String? = null) {
 
-        // Cambia visualmente al tab de pacientes
-        selectItem(R.id.nav_pacientes)
-
         // Abre Expediente encima
         val fragment = ExpedienteFragment().apply {
             arguments = Bundle().apply {
@@ -87,7 +84,7 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, fragment)
-            .addToBackStack("expediente")
+            .addToBackStack(null)
             .commit()
     }
 

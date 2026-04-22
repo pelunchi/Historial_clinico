@@ -14,7 +14,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp">
+        android:padding="12dp"
+        android:clickable="false"
+        android:focusable="false">
 
         <!-- Avatar -->
         <TextView
@@ -73,7 +75,7 @@
                 android:layout_marginTop="2dp"
                 android:text="Hoy, 10:30 AM"
                 android:textColor="@color/text_tertiary"
-                android:textSize="13sp" />
+                android:textSize="14sp" />
 
         </LinearLayout>
 

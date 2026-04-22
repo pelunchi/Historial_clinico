@@ -1,5 +1,6 @@
 package com.example.historialclinico.ui.fragments
 
+import android.widget.ImageButton
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -55,11 +56,6 @@ class ExpedienteFragment : Fragment() {
     private lateinit var etHospitalizaciones: TextInputEditText
     private lateinit var etAppOtros: TextInputEditText
 
-    // PA
-    private lateinit var etPaInicio: TextInputEditText
-    private lateinit var etPaDescripcion: TextInputEditText
-    private lateinit var etPaEvolucion: TextInputEditText
-
     // EF
     private lateinit var etTalla: TextInputEditText
     private lateinit var etPeso: TextInputEditText
@@ -81,7 +77,8 @@ class ExpedienteFragment : Fragment() {
     // UI
     private lateinit var tvEstado: TextView
     private lateinit var btnGuardar: MaterialButton
-    private lateinit var btnLimpiar: MaterialButton
+    private lateinit var btnBack: ImageButton
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -95,7 +92,9 @@ class ExpedienteFragment : Fragment() {
         setupDatePickers()
         setupImcCalculo()
         btnGuardar.setOnClickListener { guardar() }
-        btnLimpiar.setOnClickListener { limpiar() }
+        btnBack.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
     }
 
     private fun initViews(v: View) {
@@ -119,9 +118,7 @@ class ExpedienteFragment : Fragment() {
         etCronicas      = v.findViewById(R.id.etAppCronicas)
         etHospitalizaciones = v.findViewById(R.id.etAppHospitalizaciones)
         etAppOtros      = v.findViewById(R.id.etAppOtros)
-        etPaInicio      = v.findViewById(R.id.etPaInicio)
-        etPaDescripcion = v.findViewById(R.id.etPaDescripcion)
-        etPaEvolucion   = v.findViewById(R.id.etPaEvolucion)
+
         etTalla         = v.findViewById(R.id.etEfTalla)
         etPeso          = v.findViewById(R.id.etEfPeso)
         etImc           = v.findViewById(R.id.etEfImc)
@@ -131,14 +128,10 @@ class ExpedienteFragment : Fragment() {
         etTemp          = v.findViewById(R.id.etEfTemp)
         etSpo2          = v.findViewById(R.id.etEfSpo2)
         etEfObs         = v.findViewById(R.id.etEfObs)
-        etMeds          = v.findViewById(R.id.etTratMeds)
-        etDosis         = v.findViewById(R.id.etTratDosis)
-        etTerapias      = v.findViewById(R.id.etTratTerapias)
-        etNotas         = v.findViewById(R.id.etTratNotas)
-        etProxima       = v.findViewById(R.id.etTratProxima)
+
         tvEstado        = v.findViewById(R.id.tvEstado)
         btnGuardar      = v.findViewById(R.id.btnGuardar)
-        btnLimpiar      = v.findViewById(R.id.btnLimpiar)
+        btnBack         = v.findViewById(R.id.btnBack)
     }
 
     private fun setupSexoDropdown() {
@@ -149,7 +142,7 @@ class ExpedienteFragment : Fragment() {
     }
 
     private fun setupDatePickers() {
-        listOf(etFechaNac, etPaInicio, etProxima).forEach { campo ->
+        listOf(etFechaNac).forEach { campo ->
             campo.setOnClickListener { mostrarDatePicker(campo) }
             campo.setOnFocusChangeListener { _, focused -> if (focused) mostrarDatePicker(campo) }
         }
@@ -181,10 +174,6 @@ class ExpedienteFragment : Fragment() {
             Snackbar.make(requireView(), "El nombre es obligatorio", Snackbar.LENGTH_LONG).show()
             return
         }
-        if (etPaDescripcion.text.isNullOrBlank()) {
-            Snackbar.make(requireView(), "Describe el padecimiento actual", Snackbar.LENGTH_LONG).show()
-            return
-        }
 
         val talla = etTalla.text.toString().toDoubleOrNull() ?: 0.0
         val peso  = etPeso.text.toString().toDoubleOrNull()  ?: 0.0
@@ -212,9 +201,7 @@ class ExpedienteFragment : Fragment() {
             appCronicas          = etCronicas.text.toString(),
             appHospitalizaciones = etHospitalizaciones.text.toString(),
             appOtros             = etAppOtros.text.toString(),
-            paInicio             = etPaInicio.text.toString(),
-            paDescripcion        = etPaDescripcion.text.toString(),
-            paEvolucion          = etPaEvolucion.text.toString(),
+
             efTalla              = talla,
             efPeso               = peso,
             efImc                = imc,
@@ -223,12 +210,7 @@ class ExpedienteFragment : Fragment() {
             efFrecRespiratoria   = etFr.text.toString().toIntOrNull() ?: 0,
             efTemperatura        = etTemp.text.toString().toDoubleOrNull() ?: 0.0,
             efSpo2               = etSpo2.text.toString().toDoubleOrNull() ?: 0.0,
-            efObservaciones      = etEfObs.text.toString(),
-            tratMedicamentos     = etMeds.text.toString(),
-            tratDosis            = etDosis.text.toString(),
-            tratTerapias         = etTerapias.text.toString(),
-            tratNotas            = etNotas.text.toString(),
-            tratProximaConsulta  = etProxima.text.toString()
+
         )
 
         setEstado("⏳ Guardando...", "#1976D2")
@@ -250,18 +232,5 @@ class ExpedienteFragment : Fragment() {
         tvEstado.visibility = View.VISIBLE
         tvEstado.text = texto
         tvEstado.setTextColor(android.graphics.Color.parseColor(color))
-    }
-
-    private fun limpiar() {
-        expedienteId = ""
-        listOf(etNombre, etEdad, etFechaNac, etCurp, etDireccion, etTelefono, etCorreo,
-            etAhfOtros, etCirugias, etAlergias, etCronicas, etHospitalizaciones, etAppOtros,
-            etPaInicio, etPaDescripcion, etPaEvolucion, etTalla, etPeso, etImc, etPresion,
-            etFc, etFr, etTemp, etSpo2, etEfObs, etMeds, etDosis, etTerapias, etNotas, etProxima
-        ).forEach { it.setText("") }
-        actvSexo.setText("")
-        listOf(cbDiabetes, cbHipertension, cbCancer, cbCardio, cbObesidad, cbRenal)
-            .forEach { it.isChecked = false }
-        tvEstado.visibility = View.GONE
     }
 }

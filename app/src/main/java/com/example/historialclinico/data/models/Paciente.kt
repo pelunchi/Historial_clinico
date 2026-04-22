@@ -9,6 +9,7 @@ data class Paciente(
     val edad: Int = 0,
     val sexo: String = "",
     val tipoSangre: String = "",
+    var alergias: String = "",
     val avatarColorRes: Int = R.color.avatar_blue
 ) : Serializable {
 

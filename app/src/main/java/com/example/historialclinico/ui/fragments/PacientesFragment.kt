@@ -50,6 +50,18 @@ class PacientesFragment : Fragment() {
                     avatarColorRes = AvatarColorHelper.colorAleatorio()),
                 Paciente("3", "Lucía Ramírez",  28, "F", "B-",
                     avatarColorRes = AvatarColorHelper.colorAleatorio()),
+                Paciente("4", "Lidia Valenzuela", 45, "F", "O+",
+                    avatarColorRes = AvatarColorHelper.colorAleatorio()),
+                Paciente("5", "Alejandra Sofía Ximenez Riveros",   32, "M", "A+",
+                    avatarColorRes = AvatarColorHelper.colorAleatorio()),
+                Paciente("6", "José José",  28, "F", "B-",
+                    avatarColorRes = AvatarColorHelper.colorAleatorio()),
+                Paciente("7", "Pedro Sánchez", 45, "F", "O+",
+                    avatarColorRes = AvatarColorHelper.colorAleatorio()),
+                Paciente("8", "Ximena Rodriguez Félix",   32, "M", "A+",
+                    avatarColorRes = AvatarColorHelper.colorAleatorio()),
+                Paciente("3", "Lucía Ramírez",  28, "F", "B-",
+                    avatarColorRes = AvatarColorHelper.colorAleatorio()),
             )
         )
         listaFiltrada.addAll(listaPacientes)
@@ -67,7 +79,13 @@ class PacientesFragment : Fragment() {
     private fun navegarAPerfilPaciente(paciente: Paciente) {
         val fragment = PacientePerfilFragment.newInstance(paciente)
         parentFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, fragment)  // usa el ID de tu contenedor
+            .setCustomAnimations(
+                R.anim.slide_in_right,  // nuevo fragment entra por la derecha
+                R.anim.slide_out_left,  // fragment actual sale por la izquierda
+                R.anim.slide_in_left,   // al volver, entra por la izquierda
+                R.anim.slide_out_right  // al volver, sale por la derecha
+            )
+            .replace(R.id.fragmentContainer, fragment)
             .addToBackStack(null)
             .commit()
     }
