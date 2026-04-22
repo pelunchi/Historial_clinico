@@ -18,13 +18,5 @@ class PreferencesManager(context: Context) {
     fun saveTheme(themeId: Int) = prefs.edit().putInt("theme", themeId).apply()
     fun getTheme(): Int = prefs.getInt("theme", 0)
 
-    fun getThemeDrawable(): Int = when (getTheme()) {
-        1 -> R.drawable.gradient_blue
-        2 -> R.drawable.gradient_green
-        3 -> R.drawable.gradient_orange
-        4 -> R.drawable.gradient_pink
-        else -> R.drawable.gradient_purple
-    }
-
     fun clearAll() = prefs.edit().clear().apply()
 }
