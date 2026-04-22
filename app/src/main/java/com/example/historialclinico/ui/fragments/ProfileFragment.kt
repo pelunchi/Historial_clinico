@@ -27,7 +27,7 @@ class ProfileFragment : Fragment() {
         val user = auth.currentUser
 
         // Mostrar nombre del usuario
-        view.findViewById<TextView>(R.id.tvUserName).text = user?.displayName ?: "—"
+        view.findViewById<TextView>(R.id.tvUserName).text = user?.displayName ?: "nombre_medico"
 
         // Mostrar email del usuario
         view.findViewById<TextView>(R.id.tvUserEmail).text = user?.email ?: "—"
