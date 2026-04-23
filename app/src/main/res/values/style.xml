@@ -13,5 +13,132 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+    <style name="CustomInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <!-- Fondo -->
+        <item name="boxBackgroundColor">@color/fondo_gris_claro</item>
+        <!-- Borde dinámico -->
+        <item name="boxStrokeColor">@color/stroke_input</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <!-- Borde redondeado -->
+        <item name="boxCornerRadiusTopStart">8dp</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="boxCornerRadiusBottomStart">8dp</item>
+        <item name="boxCornerRadiusBottomEnd">8dp</item>
+        <!-- Texto -->
+        <item name="hintTextColor">@color/texto_formulario_claro</item>
+    </style>
+
+    <style name="CustomDropdown" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <!-- Fondo -->
+        <item name="boxBackgroundColor">@color/fondo_gris_claro</item>
+        <!-- Borde -->
+        <item name="boxStrokeColor">@color/stroke_input</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <!-- Bordes -->
+        <item name="boxCornerRadiusTopStart">8dp</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="boxCornerRadiusBottomStart">8dp</item>
+        <item name="boxCornerRadiusBottomEnd">8dp</item>
+        <!-- Hint -->
+        <item name="hintTextColor">@color/texto_formulario_claro</item>
+        <!-- Icono dropdown -->
+        <item name="endIconTint">@color/borde_formulario_oscuro</item>
+    </style>
+
+    <!-- Botom IMC -->
+    <style name="CustomInput.IMC" parent="CustomInput">
+        <!-- Fondo diferente -->
+        <item name="boxBackgroundColor">@color/fondo_section_da</item>
+        <!-- Borde diferente -->
+        <item name="boxStrokeColor">@color/stroke_imc</item>
+    </style>
+
+    <!-- Inputs Ficha -->
+    <style name="CustomInput.Ficha" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <!-- Fondo -->
+        <item name="boxBackgroundColor">@color/fondo_gris_claro</item>
+        <!-- Borde dinámico -->
+        <item name="boxStrokeColor">@color/stroke_input_fi</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <!-- Borde redondeado -->
+        <item name="boxCornerRadiusTopStart">8dp</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="boxCornerRadiusBottomStart">8dp</item>
+        <item name="boxCornerRadiusBottomEnd">8dp</item>
+        <!-- Texto -->
+        <item name="hintTextColor">@color/texto_formulario_claro</item>
+    </style>
+
+    <style name="CustomDropdown.Ficha" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <!-- Fondo -->
+        <item name="boxBackgroundColor">@color/fondo_gris_claro</item>
+        <!-- Borde -->
+        <item name="boxStrokeColor">@color/stroke_input_fi</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">3dp</item>
+        <!-- Bordes -->
+        <item name="boxCornerRadiusTopStart">8dp</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="boxCornerRadiusBottomStart">8dp</item>
+        <item name="boxCornerRadiusBottomEnd">8dp</item>
+        <!-- Hint -->
+        <item name="hintTextColor">@color/texto_formulario_claro</item>
+        <!-- Icono dropdown -->
+        <item name="endIconTint">@color/borde_formulario_oscuro</item>
+    </style>
+
+    <!-- Inputs AHF -->
+    <style name="CustomInput.AHF" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <!-- Fondo -->
+        <item name="boxBackgroundColor">@color/fondo_gris_claro</item>
+        <!-- Borde dinámico -->
+        <item name="boxStrokeColor">@color/stroke_input_ahf</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <!-- Borde redondeado -->
+        <item name="boxCornerRadiusTopStart">8dp</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="boxCornerRadiusBottomStart">8dp</item>
+        <item name="boxCornerRadiusBottomEnd">8dp</item>
+        <!-- Texto -->
+        <item name="hintTextColor">@color/texto_formulario_claro</item>
+    </style>
+
+    <!-- Inputs APP -->
+    <style name="CustomInput.PAA" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <!-- Fondo -->
+        <item name="boxBackgroundColor">@color/fondo_gris_claro</item>
+        <!-- Borde dinámico -->
+        <item name="boxStrokeColor">@color/stroke_input_paa</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <!-- Borde redondeado -->
+        <item name="boxCornerRadiusTopStart">8dp</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="boxCornerRadiusBottomStart">8dp</item>
+        <item name="boxCornerRadiusBottomEnd">8dp</item>
+        <!-- Texto -->
+        <item name="hintTextColor">@color/texto_formulario_claro</item>
+    </style>
+
+    <!-- Inputs EF -->
+    <style name="CustomInput.EF" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <!-- Fondo -->
+        <item name="boxBackgroundColor">@color/fondo_gris_claro</item>
+        <!-- Borde dinámico -->
+        <item name="boxStrokeColor">@color/stroke_input_ef</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <!-- Borde redondeado -->
+        <item name="boxCornerRadiusTopStart">8dp</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="boxCornerRadiusBottomStart">8dp</item>
+        <item name="boxCornerRadiusBottomEnd">8dp</item>
+        <!-- Texto -->
+        <item name="hintTextColor">@color/texto_formulario_claro</item>
+    </style>
 
 </resources>

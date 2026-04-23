@@ -129,7 +129,6 @@ class ExpedienteFragment : Fragment() {
         etSpo2          = v.findViewById(R.id.etEfSpo2)
         etEfObs         = v.findViewById(R.id.etEfObs)
 
-        tvEstado        = v.findViewById(R.id.tvEstado)
         btnGuardar      = v.findViewById(R.id.btnGuardar)
         btnBack         = v.findViewById(R.id.btnBack)
     }

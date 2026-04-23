@@ -34,7 +34,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Nuevo paciente"
+        android:text="Nueva consulta"
         android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="#1A1A1A"
@@ -61,7 +61,7 @@
         android:background="@color/fondo_gris_claro"
         android:paddingBottom="24dp">
 
-        <!-- ═══ FICHA ═══ -->
+        <!-- ═══ Informacion de consulta ═══ -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -84,14 +84,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/section_ficha"
-                    android:text="Ficha de Identificación"
+                    android:text="Informacion de consulta"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:textStyle="bold"
                     android:paddingStart="20dp"
                     android:paddingEnd="16dp"
                     android:paddingTop="12dp"
-                    android:paddingBottom="12dp"/>
+                    android:paddingBottom="12dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -101,20 +101,6 @@
                     android:paddingTop="14dp"
                     android:paddingBottom="20dp">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilNombre"
-                        style="@style/CustomInput.Ficha"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:hint="Nombre completo">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etNombre"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textPersonName|textCapWords"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -123,54 +109,16 @@
                         android:layout_marginBottom="8dp">
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/tilEdad"
-                            style="@style/CustomInput.Ficha"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="6dp"
-                            android:hint="Edad">
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etEdad"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="number"/>
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/tilSexo"
-                            style="@style/CustomDropdown"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:hint="Sexo">
-                            <AutoCompleteTextView
-                                android:id="@+id/actvSexo"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="none"
-                                android:focusable="false"/>
-                        </com.google.android.material.textfield.TextInputLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="2"
-                        android:layout_marginBottom="8dp">
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/tilFechaNac"
+                            android:id="@+id/tilFechaConsulta"
                             style="@style/CustomInput.Ficha"
                             android:layout_width="40dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginEnd="6dp"
 
-                            android:hint="Fecha de nacimiento">
+                            android:hint="Fecha de consulta">
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etFechaNac"
+                                android:id="@+id/etFechaConsulta"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="none"
@@ -179,16 +127,14 @@
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/tilTipoSangre"
+                            android:id="@+id/tilHoraConsulta"
                             style="@style/CustomInput.Ficha"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:hint="Tipo de sangre"
-                            app:counterEnabled="true"
-                            app:counterMaxLength="3">
+                            android:hint="Hora">
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etTipoSangre"
+                                android:id="@+id/etHoraConsulta"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="textCapCharacters"
@@ -198,297 +144,115 @@
                     </LinearLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilCurp"
+                        android:id="@+id/tilMotivoConsulta"
                         style="@style/CustomInput.Ficha"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:hint="CURP"
-                        app:counterEnabled="true"
-                        app:counterMaxLength="18">
+                        android:hint="Motivo de visita"
+                        app:helperText="Esta información se mostrará como titulo"
+                        app:helperTextEnabled="true">
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etCurp"
+                            android:id="@+id/etMotivoConsulta"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textCapCharacters"
-                            android:maxLength="18"/>
+                            android:inputType="textMultiLine"
+                            android:minLines="2"
+                            android:gravity="top|start"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilDireccion"
+                        android:id="@+id/tilSintomas"
                         style="@style/CustomInput.Ficha"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:hint="Dirección">
+                        android:hint="Sintomas"
+                        app:helperText="Sintomas que describe el paciente"
+                        app:helperTextEnabled="true">
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etDireccion"
+                            android:id="@+id/etSintomas"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textPostalAddress|textCapWords"/>
+                            android:inputType="textMultiLine"
+                            android:minLines="2"
+                            android:gravity="top|start"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilTelefono"
+                        android:id="@+id/tilDiagnostico"
                         style="@style/CustomInput.Ficha"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:hint="Teléfono">
+                        android:hint="Diagnóstico">
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etTelefono"
+                            android:id="@+id/etDiagnostico"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="phone"/>
+                            android:inputType="textMultiLine"
+                            android:minLines="2"
+                            android:gravity="top|start"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilCorreo"
+                        android:id="@+id/tilNotasConsulta"
                         style="@style/CustomInput.Ficha"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Correo electrónico">
+                        android:layout_marginBottom="8dp"
+                        android:hint="Notas del médico">
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etCorreo"
+                            android:id="@+id/etResumenConsulta"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textEmailAddress"/>
+                            android:inputType="textMultiLine"
+                            android:minLines="2"
+                            android:gravity="top|start"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilIndicaciones"
+                        style="@style/CustomInput.Ficha"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:hint="Indicaciones">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etIndicaciones"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textMultiLine"
+                            android:minLines="2"
+                            android:gravity="top|start"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilReceta"
+                        style="@style/CustomInput.Ficha"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:hint="Receta">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etReceta"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textMultiLine"
+                            android:minLines="2"
+                            android:gravity="top|start"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
-
-        <!-- ═══ AHF ═══ -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="6dp"
-            app:cardBackgroundColor="#FFFFFF">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/fondo_expediente_antecedentes_heredofamiliares">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/section_ahf"
-                    android:text="🧬  AHF — Antecedentes Heredofamiliares"
-                    android:textColor="#FFFFFF"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:paddingTop="12dp"
-                    android:paddingBottom="12dp"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="20dp"
-                    android:paddingTop="14dp"
-                    android:paddingBottom="20dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Enfermedades en familiares directos:"
-                        android:textColor="#616161"
-                        android:textSize="14sp"
-                        android:layout_marginBottom="6dp"/>
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/cbAhfDiabetes"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Diabetes mellitus"/>
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/cbAhfHipertension"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Hipertensión arterial"/>
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/cbAhfCancer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Cáncer"/>
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/cbAhfCardio"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Cardiopatías"/>
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/cbAhfObesidad"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Obesidad"/>
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/cbAhfRenal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Enfermedad renal"/>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilAhfOtros"
-                        style="@style/CustomInput.AHF"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:hint="Otros antecedentes familiares">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etAhfOtros"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:minLines="2"
-                            android:gravity="top|start"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- ═══ APP ═══ -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="6dp"
-            app:cardBackgroundColor="#FFFFFF">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/fondo_expediente_antecedentes_patologicos">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/section_app"
-                    android:text="🏥  APP — Antecedentes Personales Patológicos"
-                    android:textColor="#FFFFFF"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:paddingTop="12dp"
-                    android:paddingBottom="12dp"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingHorizontal="20dp"
-                    android:paddingTop="14dp"
-                    android:paddingBottom="20dp">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilAppCirugias"
-                        style="@style/CustomInput.PAA"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:hint="Cirugías previas">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etAppCirugias"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:minLines="2"
-                            android:gravity="top|start"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilAppAlergias"
-                        style="@style/CustomInput.PAA"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:hint="Alergias">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etAppAlergias"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:minLines="2"
-                            android:gravity="top|start"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilAppCronicas"
-                        style="@style/CustomInput.PAA"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:hint="Enfermedades crónicas">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etAppCronicas"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:minLines="2"
-                            android:gravity="top|start"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilAppHospitalizaciones"
-                        style="@style/CustomInput.PAA"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:hint="Hospitalizaciones previas">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etAppHospitalizaciones"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:minLines="2"
-                            android:gravity="top|start"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilAppOtros"
-                        style="@style/CustomInput.PAA"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Otros">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etAppOtros"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:minLines="2"
-                            android:gravity="top|start"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
         <!-- ═══ EF ═══ -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="12dp"
             app:cardCornerRadius="8dp"
             app:cardElevation="6dp"
@@ -529,7 +293,7 @@
                         android:layout_marginBottom="8dp">
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/tilEfTalla"
+                            android:id="@+id/tilEfTallaConsulta"
                             style="@style/CustomInput.EF"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -537,21 +301,21 @@
                             android:layout_marginEnd="6dp"
                             android:hint="Talla (cm)">
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etEfTalla"
+                                android:id="@+id/etEfTallaConsulta"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="numberDecimal"/>
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/tilEfPeso"
+                            android:id="@+id/tilEfPesoConsulta"
                             style="@style/CustomInput.EF"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:hint="Peso (kg)">
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etEfPeso"
+                                android:id="@+id/etEfPesoConsulta"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="numberDecimal"/>
@@ -559,7 +323,7 @@
                     </LinearLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilEfImc"
+                        android:id="@+id/tilEfImcConsulta"
                         style="@style/CustomInput.IMC"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -568,7 +332,7 @@
                         app:helperText="Se calcula con talla y peso"
                         app:helperTextEnabled="true">
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etEfImc"
+                            android:id="@+id/etEfImcConsulta"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusable="false"
@@ -588,7 +352,7 @@
                         android:layout_marginBottom="8dp">
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/tilEfPa"
+                            android:id="@+id/tilEfPaConsulta"
                             style="@style/CustomInput.EF"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -596,21 +360,21 @@
                             android:layout_marginEnd="6dp"
                             android:hint="Presión (mmHg)">
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etEfPa"
+                                android:id="@+id/etEfPaConsulta"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="text"/>
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/tilEfFc"
+                            android:id="@+id/tilEfFcConsulta"
                             style="@style/CustomInput.EF"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:hint="FC (lpm)">
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etEfFc"
+                                android:id="@+id/etEfFcConsulta"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="number"/>
@@ -625,7 +389,7 @@
                         android:layout_marginBottom="8dp">
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/tilEfTemp"
+                            android:id="@+id/tilEfTempConsulta"
                             style="@style/CustomInput.EF"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -633,21 +397,21 @@
                             android:layout_marginEnd="6dp"
                             android:hint="Temp (°C)">
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etEfTemp"
+                                android:id="@+id/etEfTempConsulta"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="numberDecimal"/>
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/tilEfSpo2"
+                            android:id="@+id/tilEfSpo2Consulta"
                             style="@style/CustomInput.EF"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:hint="SpO₂ (%)">
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etEfSpo2"
+                                android:id="@+id/etEfSpo2Consulta"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="numberDecimal"/>
@@ -655,7 +419,7 @@
                     </LinearLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilEfFr"
+                        android:id="@+id/tilEfFrConsulta"
                         style="@style/CustomInput.EF"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -669,13 +433,13 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilEfObs"
+                        android:id="@+id/tilEfObsConsulta"
                         style="@style/CustomInput.EF"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Observaciones físicas">
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etEfObs"
+                            android:id="@+id/etEfObsConsulta"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textMultiLine"
@@ -689,10 +453,10 @@
         <!-- ═══ BOTON ═══ -->
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnGuardar"
+            android:id="@+id/btnGuardarConsulta"
             android:layout_width="match_parent"
             android:layout_height="47dp"
-            android:text=" + Guardar Paciente"
+            android:text=" + Crear Consulta"
             android:textSize="18sp"
             android:textColor="#FFFFFF"
             app:backgroundTint="@null"

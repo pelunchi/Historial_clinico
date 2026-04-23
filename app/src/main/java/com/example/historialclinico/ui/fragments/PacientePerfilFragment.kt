@@ -18,6 +18,7 @@ import com.example.historialclinico.data.models.Paciente
 import com.example.historialclinico.ui.adapters.ConsultaSimulada
 import com.example.historialclinico.ui.adapters.ConsultasAdapter
 import com.google.android.material.button.MaterialButton
+import com.example.historialclinico.ui.fragments.ConsultaFragment
 
 class PacientePerfilFragment : Fragment() {
 
@@ -101,7 +102,7 @@ class PacientePerfilFragment : Fragment() {
             ConsultaSimulada("2", "02 Enero 2026",      "2:04 PM",  "Control de presión arterial"),
             ConsultaSimulada("3", "10 Octubre 2025",    "6:24 PM",  "Dolor de garganta regular"),
             ConsultaSimulada("4", "26 Septiembre 2025", "12:14 PM", "Control de presión arterial"),
-            ConsultaSimulada("5", "16 Junio 2025",      "10:45 AM", "Rinitis")
+            ConsultaSimulada("5", "16 Junio 2025",      "10:45 AM", "123456789012345678901234567890123456789012345678901234567890")
         )
 
         val rv = view.findViewById<RecyclerView>(R.id.rvConsultas)
@@ -121,7 +122,23 @@ class PacientePerfilFragment : Fragment() {
         btnConsultas.setOnClickListener  { mostrarConsultas()  }
 
         btnEditarExpediente.setOnClickListener { }
-        btnNuevaConsulta.setOnClickListener    { }
+        btnNuevaConsulta.setOnClickListener {
+            val fragment = ConsultaFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable("paciente", paciente)
+                }
+            }
+            parentFragmentManager.beginTransaction()
+                .setCustomAnimations(
+                    R.anim.slide_in_right,
+                    R.anim.slide_out_left,
+                    R.anim.slide_in_left,
+                    R.anim.slide_out_right
+                )
+                .replace(R.id.fragmentContainer, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     private fun mostrarExpediente() {
