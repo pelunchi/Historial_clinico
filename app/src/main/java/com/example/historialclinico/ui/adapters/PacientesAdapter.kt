@@ -12,7 +12,8 @@ import kotlin.math.absoluteValue
 
 class PacientesAdapter(
     private val lista: List<Paciente>,
-    private val onItemClick: (Paciente) -> Unit   // 👈 nuevo parámetro
+    private val onItemClick: (Paciente) -> Unit,
+    private val onItemLongClick: (Paciente) -> Unit = {}
 ) : RecyclerView.Adapter<PacientesAdapter.PacienteViewHolder>() {
 
     private val avatarColors = listOf(
@@ -29,18 +30,20 @@ class PacientesAdapter(
         fun bind(paciente: Paciente) {
             binding.tvAvatarInitials.text = paciente.iniciales
             binding.tvNombrePaciente.text = paciente.nombre
-            binding.tvInfoPaciente.text   =
-                "${paciente.edad} años | ${paciente.sexo} | ${paciente.tipoSangre}"
 
-            val colorRes = avatarColors[
-                paciente.id.hashCode().absoluteValue % avatarColors.size
-            ]
+            // Mostrar tipo de sangre si existe
+            val tipoSangre = if (paciente.tipoSangre.isNotBlank()) " | ${paciente.tipoSangre}" else ""
+            binding.tvInfoPaciente.text = "${paciente.edad} años | ${paciente.sexo}$tipoSangre"
+
+            // Color determinístico por ID — siempre el mismo para el mismo paciente
+            val colorRes = avatarColors[paciente.id.hashCode().absoluteValue % avatarColors.size]
             val color = ContextCompat.getColor(binding.root.context, colorRes)
             binding.tvAvatarInitials.backgroundTintList = ColorStateList.valueOf(color)
 
-            // 👇 El click en la tarjeta completa
-            binding.root.setOnClickListener {
-                onItemClick(paciente)
+            binding.root.setOnClickListener { onItemClick(paciente) }
+            binding.root.setOnLongClickListener {
+                onItemLongClick(paciente)
+                true
             }
         }
     }
@@ -52,9 +55,8 @@ class PacientesAdapter(
         return PacienteViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: PacienteViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PacienteViewHolder, position: Int) =
         holder.bind(lista[position])
-    }
 
     override fun getItemCount() = lista.size
 }

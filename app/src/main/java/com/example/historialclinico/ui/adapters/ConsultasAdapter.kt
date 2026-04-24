@@ -2,34 +2,23 @@ package com.example.historialclinico.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.historialclinico.R
+import com.example.historialclinico.data.models.Consulta
 import com.example.historialclinico.databinding.ItemConsultaBinding
 
-data class ConsultaSimulada(
-    val id: String,
-    val fecha: String,
-    val hora: String,
-    val motivo: String
-)
-
 class ConsultasAdapter(
-    private val lista: List<ConsultaSimulada>,
-    private val onItemClick: (ConsultaSimulada) -> Unit
+    private val lista: List<Consulta>,
+    private val onItemClick: (Consulta) -> Unit
 ) : RecyclerView.Adapter<ConsultasAdapter.ConsultaViewHolder>() {
 
     inner class ConsultaViewHolder(private val binding: ItemConsultaBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(consulta: ConsultaSimulada) {
+        fun bind(consulta: Consulta) {
             binding.tvConsultationTitle.text  = "Consulta – ${consulta.fecha}"
-            binding.tvConsultationReason.text = consulta.motivo
+            binding.tvConsultationReason.text = consulta.motivo.ifBlank { "Sin motivo registrado" }
             binding.tvConsultationTime.text   = consulta.hora
-
-            binding.root.setOnClickListener {
-                onItemClick(consulta)
-            }
+            binding.root.setOnClickListener { onItemClick(consulta) }
         }
     }
 
@@ -40,9 +29,8 @@ class ConsultasAdapter(
         return ConsultaViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ConsultaViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ConsultaViewHolder, position: Int) =
         holder.bind(lista[position])
-    }
 
     override fun getItemCount() = lista.size
 }

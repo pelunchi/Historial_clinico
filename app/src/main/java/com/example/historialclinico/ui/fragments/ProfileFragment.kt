@@ -7,13 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.historialclinico.R
+import com.example.historialclinico.data.database.UserRepository
 import com.example.historialclinico.ui.activities.LoginActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 
 class ProfileFragment : Fragment() {
+
+    private val userRepo = UserRepository()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,8 +31,19 @@ class ProfileFragment : Fragment() {
         val auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
 
-        // Mostrar email del usuario
+        // Email siempre disponible localmente
         view.findViewById<TextView>(R.id.tvUserEmail).text = user?.email ?: "—"
+
+        // Nombre del doctor desde Firebase
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val perfil = userRepo.obtenerPerfil()
+                val tvNombre = view.findViewById<TextView?>(R.id.tvUserNombre)
+                if (!perfil?.nombre.isNullOrBlank()) {
+                    tvNombre?.text = "Dr. ${perfil!!.nombre}"
+                }
+            } catch (_: Exception) { /* sin nombre, no pasa nada */ }
+        }
 
         // Cerrar sesión
         view.findViewById<MaterialButton>(R.id.btnLogout).setOnClickListener {

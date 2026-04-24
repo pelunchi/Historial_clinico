@@ -1,12 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/containerPaciente"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
-    android:id="@+id/containerPaciente"
     android:layout_marginBottom="8dp"
-
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
     app:cardBackgroundColor="@color/fondo_secundario">
@@ -16,50 +15,25 @@
         android:layout_height="wrap_content"
         android:padding="15dp">
 
+        <!-- Info — izquierda -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/layoutInfo"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="right"
             android:orientation="vertical"
-
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-            <!-- Hora -->
-            <TextView
-                android:id="@+id/tvConsultationTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="10:30 AM"
-                android:textColor="#666666"
-                android:textSize="14sp" />
-
-            <!-- Flecha -->
-            <TextView
-                android:id="@+id/tvArrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ver →"
-                android:textColor="#2E7D32"
-                android:textSize="13sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <!-- Info -->
-        <LinearLayout
-            android:layout_width="280dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/layoutDerecho">
 
             <TextView
                 android:id="@+id/tvConsultationTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Consulta – 08 Septiembre 2026"
+                android:text=""
                 android:textColor="#1A1A1A"
                 android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/tvConsultationReason"
@@ -68,7 +42,36 @@
                 android:layout_marginTop="2dp"
                 android:text="Dolor de cabeza recurrente"
                 android:textColor="#666666"
-                android:textSize="14sp" />
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <!-- Hora + flecha — derecha -->
+        <LinearLayout
+            android:id="@+id/layoutDerecho"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/tvConsultationTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10:30 AM"
+                android:textColor="#666666"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tvArrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ver →"
+                android:textColor="#2E7D32"
+                android:textSize="13sp"
+                android:textStyle="bold"/>
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

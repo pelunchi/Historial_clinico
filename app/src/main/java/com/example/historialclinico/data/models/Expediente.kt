@@ -11,6 +11,7 @@ data class Expediente(
     var edad: Int = 0,
     var sexo: String = "",
     var fechaNacimiento: String = "",
+    var tipoSangre: String = "",          // ← AÑADIDO
     var curp: String = "",
     var direccion: String = "",
     var telefono: String = "",

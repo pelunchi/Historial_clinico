@@ -6,9 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.historialclinico.R
+import com.example.historialclinico.data.database.ExpedienteRepository
+import com.example.historialclinico.data.database.UserRepository
 import com.example.historialclinico.ui.activities.MainActivity
-import com.example.historialclinico.utils.PreferencesManager
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 class InicioFragment : Fragment() {
 
@@ -19,96 +25,95 @@ class InicioFragment : Fragment() {
     private lateinit var btnNuevoPaciente: Button
     private lateinit var llUltimasConsultas: LinearLayout
 
+    private val expedienteRepo = ExpedienteRepository()
+    private val userRepo = UserRepository()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.fragment_inicio, container, false)
-    }
+    ): View = inflater.inflate(R.layout.fragment_inicio, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 🔥 Theme dinámico (lo que ya tenías)
-        val prefs = PreferencesManager(requireContext())
-
-        // 🔗 Bind de vistas
-        tvDoctorNombre = view.findViewById(R.id.doctor_nombre)
-        tvConsultasHoy = view.findViewById(R.id.tvConsultasHoy)
-        tvTotalPacientes = view.findViewById(R.id.tvTotalPacientes)
-        etBuscar = view.findViewById(R.id.etBuscar)
-        btnNuevoPaciente = view.findViewById(R.id.btnNuevoPaciente)
+        tvDoctorNombre     = view.findViewById(R.id.doctor_nombre)
+        tvConsultasHoy     = view.findViewById(R.id.tvConsultasHoy)
+        tvTotalPacientes   = view.findViewById(R.id.tvTotalPacientes)
+        etBuscar           = view.findViewById(R.id.etBuscar)
+        btnNuevoPaciente   = view.findViewById(R.id.btnNuevoPaciente)
         llUltimasConsultas = view.findViewById(R.id.llUltimasConsultas)
 
-        // 🧠 Datos mock (luego aquí conectas DB)
-        cargarDatos()
+        // ── Nombre del doctor desde Firebase ──────────────────────────
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val perfil = userRepo.obtenerPerfil()
+                tvDoctorNombre.text = if (!perfil?.nombre.isNullOrBlank())
+                    "Dr. ${perfil!!.nombre}" else "Doctor"
+            } catch (_: Exception) {
+                tvDoctorNombre.text = "Doctor"
+            }
+        }
 
-        // 🔍 Buscar (simple por ahora)
+        // ── Estadísticas y últimas consultas desde Firebase ───────────
+        viewLifecycleOwner.lifecycleScope.launch {
+            expedienteRepo.listarFlow().collectLatest { lista ->
+                // Total de pacientes
+                tvTotalPacientes.text = lista.size.toString()
+
+                // Consultas actualizadas hoy
+                val fmt = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                val hoy = fmt.format(Date())
+                val hoyCount = lista.count { fmt.format(Date(it.fechaActualizacion)) == hoy }
+                tvConsultasHoy.text = hoyCount.toString()
+
+                // Últimas 5 consultas
+                llUltimasConsultas.removeAllViews()
+                lista.take(5).forEach { exp ->
+                    agregarItem(exp.nombre, formatFecha(exp.fechaActualizacion))
+                }
+            }
+        }
+
+        // ── Buscar ─────────────────────────────────────────────────────
         etBuscar.setOnEditorActionListener { _, _, _ ->
-            val query = etBuscar.text.toString()
-            Toast.makeText(requireContext(), "Buscando: $query", Toast.LENGTH_SHORT).show()
+            val query = etBuscar.text.toString().trim()
+            if (query.isNotEmpty()) {
+                (requireActivity() as MainActivity).selectNavItem(R.id.nav_pacientes)
+            }
             true
         }
 
-        // ➕ Botón nuevo paciente
+        // ── Nuevo paciente ─────────────────────────────────────────────
         btnNuevoPaciente.setOnClickListener {
-            (requireActivity() as MainActivity)
-                .navegarAExpediente(pacienteId = null)
+            (requireActivity() as MainActivity).navegarAExpediente(pacienteId = null)
         }
     }
 
-    private fun cargarDatos() {
-        // Nombre doctor
-        tvDoctorNombre.text = "Dr. Juan Pérez"
-
-        // Stats (simulados)
-        tvConsultasHoy.text = "12"
-        tvTotalPacientes.text = "87"
-
-        // Lista simulada
-        agregarPaciente("María González", "Hoy, 10:30 AM")
-        agregarPaciente("Carlos López", "Ayer, 5:00 PM")
-        // Lista simulada
-        agregarPaciente("María González", "Hoy, 10:30 AM")
-        agregarPaciente("Carlos López", "Ayer, 5:00 PM")
-        // Lista simulada
-        agregarPaciente("María González", "Hoy, 10:30 AM")
-        agregarPaciente("Carlos López", "Ayer, 5:00 PM")// Lista simulada
-        agregarPaciente("María González", "Hoy, 10:30 AM")
-        agregarPaciente("Carlos López", "Ayer, 5:00 PM")
-        // Lista simulada
-        agregarPaciente("María González", "Hoy, 10:30 AM")
-        agregarPaciente("Carlos López", "Ayer, 5:00 PM")// Lista simulada
-        agregarPaciente("María González", "Hoy, 10:30 AM")
-        agregarPaciente("Carlos López", "Ayer, 5:00 PM")
-
-
-    }
-
-    private fun agregarPaciente(nombre: String, info: String) {
-
-        val item = layoutInflater.inflate(
-            R.layout.item_paciente,
-            llUltimasConsultas,
-            false
-        )
-
-        val tvNombre = item.findViewById<TextView>(R.id.tvNombrePaciente)
-        val tvInfo = item.findViewById<TextView>(R.id.tvInfoPaciente)
-        val tvAvatar = item.findViewById<TextView>(R.id.tvAvatarInitials)
-
-        tvNombre.text = nombre
-        tvInfo.text = info
-
-        // Iniciales
-        tvAvatar.text = nombre.split(" ")
-            .map { it.first() }
-            .take(2)
-            .joinToString("")
-
+    private fun agregarItem(nombre: String, info: String) {
+        val item = layoutInflater.inflate(R.layout.item_paciente, llUltimasConsultas, false)
+        item.findViewById<TextView>(R.id.tvNombrePaciente).text = nombre
+        item.findViewById<TextView>(R.id.tvInfoPaciente).text   = info
+        item.findViewById<TextView>(R.id.tvAvatarInitials).text =
+            nombre.split(" ").map { it.firstOrNull() ?: ' ' }.take(2).joinToString("")
         llUltimasConsultas.addView(item)
     }
 
+    private fun formatFecha(ts: Long): String {
+        val fmt  = SimpleDateFormat("hh:mm a", Locale.getDefault())
+        val cal  = Calendar.getInstance().apply { timeInMillis = ts }
+        val hoy  = Calendar.getInstance()
+        val ayer = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -1) }
+        return when {
+            mismaFecha(cal, hoy)  -> "Hoy, ${fmt.format(Date(ts))}"
+            mismaFecha(cal, ayer) -> "Ayer, ${fmt.format(Date(ts))}"
+            else -> SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date(ts))
+        }
+    }
 
+    private fun mismaFecha(a: Calendar, b: Calendar) =
+        a.get(Calendar.YEAR) == b.get(Calendar.YEAR) &&
+                a.get(Calendar.DAY_OF_YEAR) == b.get(Calendar.DAY_OF_YEAR)
 }
+
+private fun MainActivity.selectNavItem(navPacientes: Int) {}

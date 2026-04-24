@@ -31,7 +31,6 @@ class ExpedienteRepository {
         val datos = expediente.copy(
             id                 = id,
             userId             = auth.currentUser?.uid ?: "",
-            fechaActualizacion = System.currentTimeMillis()
         )
         ref.setValue(datos).await()
         return id
