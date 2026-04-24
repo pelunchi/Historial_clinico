@@ -26,10 +26,14 @@ class ConsultaRepository {
     private fun uid() = auth.currentUser?.uid
         ?: throw IllegalStateException("No hay sesión activa")
 
-    private fun refPaciente(expedienteId: String): DatabaseReference =
-        db.child("consultas").child(uid()).child(expedienteId)
+    private fun refUsuario(): DatabaseReference =
+        db.child("consultas").child(uid())
 
-    /** Guarda o actualiza una consulta. Devuelve el ID generado/usado. */
+    private fun refPaciente(expedienteId: String): DatabaseReference =
+        refUsuario().child(expedienteId)
+
+    // ── Guardar ────────────────────────────────────────────────────────
+
     suspend fun guardar(consulta: Consulta): String {
         val ref = if (consulta.id.isBlank())
             refPaciente(consulta.expedienteId).push()
@@ -47,13 +51,15 @@ class ConsultaRepository {
         return id
     }
 
-    /** Obtiene una consulta puntual por ID. */
+    // ── Leer una ────────────────────────────────────────────────────────
+
     suspend fun obtener(expedienteId: String, consultaId: String): Consulta? {
         val snap = refPaciente(expedienteId).child(consultaId).get().await()
         return snap.getValue(Consulta::class.java)
     }
 
-    /** Flow en tiempo real con todas las consultas de un paciente, ordenadas más reciente primero. */
+    // ── Flow de un paciente ─────────────────────────────────────────────
+
     fun listarFlow(expedienteId: String): Flow<List<Consulta>> = callbackFlow {
         val listener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -68,39 +74,43 @@ class ConsultaRepository {
         awaitClose { refPaciente(expedienteId).removeEventListener(listener) }
     }
 
+    /**
+     * Flow en tiempo real con TODAS las consultas del doctor,
+     * sin importar a qué paciente pertenecen.
+     *
+     * Cómo funciona:
+     *  - Escucha consultas/{uid}/ completo (un nivel arriba del expedienteId)
+     *  - Itera cada nodo hijo (= cada paciente) y luego cada consulta dentro
+     *  - Aplana todo en una lista única ordenada por fechaTimestamp desc
+     */
     fun listarTodasFlow(): Flow<List<Consulta>> = callbackFlow {
-        val ref = db.child("consultas").child(uid()) // 🔥 IMPORTANTE
-
         val listener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val lista = mutableListOf<Consulta>()
-
-                for (expedienteSnap in snapshot.children) {
-                    for (consultaSnap in expedienteSnap.children) {
-                        val consulta = consultaSnap.getValue(Consulta::class.java)
-                        consulta?.let { lista.add(it) }
+                val todas = mutableListOf<Consulta>()
+                // snapshot = consultas/{uid}/
+                //   ↳ child = {expedienteId}/
+                //       ↳ child = {consultaId}/ ← aquí vive cada Consulta
+                for (pacienteSnap in snapshot.children) {
+                    for (consultaSnap in pacienteSnap.children) {
+                        consultaSnap.getValue(Consulta::class.java)?.let { todas.add(it) }
                     }
                 }
-
-                trySend(lista)
+                trySend(todas.sortedByDescending { it.fechaTimestamp })
             }
-
-            override fun onCancelled(error: DatabaseError) {
-                close(error.toException())
-            }
+            override fun onCancelled(error: DatabaseError) { close(error.toException()) }
         }
-
-        ref.addValueEventListener(listener)
-        awaitClose { ref.removeEventListener(listener) }
+        refUsuario().addValueEventListener(listener)
+        awaitClose { refUsuario().removeEventListener(listener) }
     }
 
-    /** Elimina una consulta específica. */
+    // ── Eliminar ────────────────────────────────────────────────────────
+
     suspend fun eliminar(expedienteId: String, consultaId: String) {
         refPaciente(expedienteId).child(consultaId).removeValue().await()
     }
 
-    /** Elimina TODAS las consultas de un paciente (se usa al borrar el paciente). */
     suspend fun eliminarTodas(expedienteId: String) {
         refPaciente(expedienteId).removeValue().await()
     }
 }
+

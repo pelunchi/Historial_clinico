@@ -41,7 +41,6 @@ class PacientePerfilFragment : Fragment() {
     private val expRepo      = ExpedienteRepository()
     private val consultaRepo = ConsultaRepository()
 
-    // Paleta — mismo orden que PacientesAdapter para garantizar igual color
     private val avatarColors = listOf(
         R.color.avatar_yellow,
         R.color.avatar_purple,
@@ -73,7 +72,6 @@ class PacientePerfilFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         enlazarVistas(view)
         llenarHeader(view)
         configurarBotones()
@@ -94,30 +92,25 @@ class PacientePerfilFragment : Fragment() {
         val tvIniciales = view.findViewById<TextView>(R.id.tvAvatarInitials)
         tvIniciales.text = iniciales
 
-        // Color determinístico: mismo hashCode que en PacientesAdapter
         val colorRes = avatarColors[paciente.id.hashCode().absoluteValue % avatarColors.size]
         val color    = ContextCompat.getColor(requireContext(), colorRes)
         tvIniciales.backgroundTintList = ColorStateList.valueOf(color)
 
         view.findViewById<TextView>(R.id.tvNombrePaciente).text = paciente.nombre
-
-        // Info inicial con los datos del Paciente (se actualiza cuando llega el Expediente)
         actualizarSubtitulo(view, paciente.edad, paciente.sexo, paciente.tipoSangre)
     }
 
     private fun actualizarSubtitulo(view: View, edad: Int, sexo: String, tipoSangre: String) {
         val sangre = if (tipoSangre.isNotBlank()) " | $tipoSangre" else ""
-        view.findViewById<TextView>(R.id.tvInfoPaciente).text =
-            "${edad} años | ${sexo}$sangre"
+        view.findViewById<TextView>(R.id.tvInfoPaciente).text = "${edad} años | ${sexo}$sangre"
     }
 
-    // ── Expediente desde Firebase ───────────────────────────────────────
+    // ── Expediente ───────────────────────────────────────────────────────
 
     private fun cargarExpediente(view: View) {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val exp = expRepo.obtener(paciente.id) ?: return@launch
-                // Actualizar subtítulo con tipo de sangre real
                 actualizarSubtitulo(view, exp.edad, exp.sexo, exp.tipoSangre)
                 llenarDatosExpediente(view, exp)
             } catch (_: Exception) {}
@@ -125,16 +118,14 @@ class PacientePerfilFragment : Fragment() {
     }
 
     private fun llenarDatosExpediente(view: View, exp: Expediente) {
-        set(view, R.id.tvPhone, exp.telefono.ifBlank { "—" })
-        set(view, R.id.tvEmail, exp.correo.ifBlank { "—" })
+        set(view, R.id.tvPhone,  exp.telefono.ifBlank { "—" })
+        set(view, R.id.tvEmail,  exp.correo.ifBlank { "—" })
         set(view, R.id.tvFechaNacimiento, exp.fechaNacimiento.ifBlank { "—" })
-        set(view, R.id.tvCURP, exp.curp.ifBlank { "—" })
-
+        set(view, R.id.tvCURP,   exp.curp.ifBlank { "—" })
         set(view, R.id.tvAltura, if (exp.efTalla > 0) "${exp.efTalla} cm" else "—")
         set(view, R.id.tvPeso,   if (exp.efPeso  > 0) "${exp.efPeso} kg"  else "—")
-        set(view, R.id.tvIMC,    if (exp.efImc   > 0) {
-            String.format("%.1f  (${exp.categoriaImc()})", exp.efImc)
-        } else "—")
+        set(view, R.id.tvIMC,    if (exp.efImc   > 0)
+            String.format("%.1f  (${exp.categoriaImc()})", exp.efImc) else "—")
 
         val ahf = buildString {
             if (exp.ahfDiabetes)     append("Diabetes, ")
@@ -146,7 +137,6 @@ class PacientePerfilFragment : Fragment() {
             if (exp.ahfOtros.isNotBlank()) append(exp.ahfOtros)
         }.trimEnd(',', ' ')
         set(view, R.id.tvAntecedentesHeredofamiliares, ahf.ifBlank { "Sin antecedentes" })
-
         set(view, R.id.tvCirugiasPrevias,          exp.appCirugias.ifBlank { "—" })
         set(view, R.id.tvAlergias,                 exp.appAlergias.ifBlank { "—" })
         set(view, R.id.tvEnfermedadesCronicas,     exp.appCronicas.ifBlank { "—" })
@@ -158,14 +148,15 @@ class PacientePerfilFragment : Fragment() {
         try { view.findViewById<TextView>(id)?.text = text } catch (_: Exception) {}
     }
 
-    // ── Consultas desde Firebase ────────────────────────────────────────
+    // ── Consultas — click abre VerConsultaFragment ──────────────────────
 
     private fun cargarConsultas() {
         rvConsultas.layoutManager = LinearLayoutManager(requireContext())
         viewLifecycleOwner.lifecycleScope.launch {
             consultaRepo.listarFlow(paciente.id).collectLatest { consultas ->
                 rvConsultas.adapter = ConsultasAdapter(consultas) { consulta ->
-                    (requireActivity() as MainActivity).navegarAConsulta(paciente, consulta.id)
+                    (requireActivity() as MainActivity)
+                        .navegarAVerConsulta(paciente, consulta.id)   // ← ver, no editar
                 }
             }
         }
@@ -191,7 +182,6 @@ class PacientePerfilFragment : Fragment() {
         }
         btnExpediente.setOnClickListener { mostrarExpediente() }
         btnConsultas.setOnClickListener  { mostrarConsultas()  }
-
         btnEditarExpediente.setOnClickListener {
             (requireActivity() as MainActivity).navegarAExpediente(pacienteId = paciente.id)
         }
