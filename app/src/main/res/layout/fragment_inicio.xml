@@ -107,41 +107,20 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Scrollable content -->
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/llUltimasConsultas"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:fillViewport="true"
-
         android:clipToPadding="false"
         android:clipChildren="false"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="110dp"
 
         app:layout_constraintTop_toBottomOf="@id/ultimasConsultasTitulo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="110dp"
-            android:clipToPadding="false"
-            android:clipChildren="false">
-
-            <!-- Patient list container (populated from DB) -->
-            <LinearLayout
-                android:id="@+id/llUltimasConsultas"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:orientation="vertical"/>
-
-        </LinearLayout>
-    </ScrollView>
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <!-- Search bar -->
     <androidx.cardview.widget.CardView

@@ -68,6 +68,32 @@ class ConsultaRepository {
         awaitClose { refPaciente(expedienteId).removeEventListener(listener) }
     }
 
+    fun listarTodasFlow(): Flow<List<Consulta>> = callbackFlow {
+        val ref = db.child("consultas").child(uid()) // 🔥 IMPORTANTE
+
+        val listener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val lista = mutableListOf<Consulta>()
+
+                for (expedienteSnap in snapshot.children) {
+                    for (consultaSnap in expedienteSnap.children) {
+                        val consulta = consultaSnap.getValue(Consulta::class.java)
+                        consulta?.let { lista.add(it) }
+                    }
+                }
+
+                trySend(lista)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                close(error.toException())
+            }
+        }
+
+        ref.addValueEventListener(listener)
+        awaitClose { ref.removeEventListener(listener) }
+    }
+
     /** Elimina una consulta específica. */
     suspend fun eliminar(expedienteId: String, consultaId: String) {
         refPaciente(expedienteId).child(consultaId).removeValue().await()

@@ -48,6 +48,10 @@
     <color name="text_green">#27AE60</color>
     <color name="text_red">#E74C3C</color>
 
+    <!-- Texto ver consulta -->
+    <color name="texto_ver_consulta">#888888</color>
+
+
     <!-- Fondos principales -->
     <color name="fondo_principal">#F8F8F8</color>
     <color name="fondo_secundario">#FFFFFF</color>
@@ -64,6 +68,10 @@
     <color name="borde_formulario_gris">#E5E7EB</color>
     <!-- Hint -->
     <color name="texto_formulario_claro">#6B7280</color>
+
+    <!-- Fondos de informacion de consulta -->
+    <color name="fondo_section_ficha">#D7F2FF</color>
+    <color name="borde_section_ficha">#7DC2E4</color> <!--7D8C94 este es el color que realmente se ve en el formulario -->
 
     <!-- Fondos basicos -->
     <color name="bg_page">#F5F6FA</color>

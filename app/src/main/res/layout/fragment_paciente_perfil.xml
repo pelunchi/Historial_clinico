@@ -210,7 +210,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Teléfono"
-                        android:textSize="12sp"
+                        android:textSize="14sp"
                         android:textColor="#888888"/>
 
                     <TextView
@@ -227,7 +227,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Email"
-                        android:textSize="12sp"
+                        android:textSize="14sp"
                         android:textColor="#888888"/>
 
                     <TextView
@@ -244,7 +244,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Fecha de nacimiento"
-                        android:textSize="12sp"
+                        android:textSize="14sp"
                         android:textColor="#888888"/>
 
                     <TextView
@@ -261,7 +261,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="CURP"
-                        android:textSize="12sp"
+                        android:textSize="14sp"
                         android:textColor="#888888"/>
 
                     <TextView

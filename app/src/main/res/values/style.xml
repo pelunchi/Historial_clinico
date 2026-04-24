@@ -55,6 +55,15 @@
         <item name="boxStrokeColor">@color/stroke_imc</item>
     </style>
 
+    <!-- Botones Fecha y Hora de Consulta -->
+    <style name="CustomInput.FichaUnclickeable" parent="CustomInput">
+        <!-- Fondo diferente -->
+        <item name="boxBackgroundColor">@color/fondo_section_ficha</item>
+        <!-- Borde diferente -->
+        <item name="boxStrokeColor">@color/stroke_ficha_unclickeable</item>
+
+    </style>
+
     <!-- Inputs Ficha -->
     <style name="CustomInput.Ficha" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <!-- Fondo -->
