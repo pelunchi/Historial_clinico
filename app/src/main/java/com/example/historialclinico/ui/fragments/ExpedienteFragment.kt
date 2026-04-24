@@ -141,12 +141,7 @@ class ExpedienteFragment : Fragment() {
 
         if (exp.efTalla > 0) etTalla.setText(exp.efTalla.toString())
         if (exp.efPeso  > 0) etPeso.setText(exp.efPeso.toString())
-        etPa.setText(exp.efPresionArterial)
-        if (exp.efFrecCardiaca    > 0) etFc.setText(exp.efFrecCardiaca.toString())
-        if (exp.efFrecRespiratoria > 0) etFr.setText(exp.efFrecRespiratoria.toString())
-        if (exp.efTemperatura     > 0) etTemp.setText(exp.efTemperatura.toString())
-        if (exp.efSpo2            > 0) etSpo2.setText(exp.efSpo2.toString())
-        etEfObs.setText(exp.efObservaciones)
+
     }
 
     // ── Guardar ────────────────────────────────────────────────────────
@@ -187,12 +182,6 @@ class ExpedienteFragment : Fragment() {
             efTalla              = talla,
             efPeso               = peso,
             efImc                = imc,
-            efPresionArterial    = etPa.text.toString(),
-            efFrecCardiaca       = etFc.text.toString().toIntOrNull() ?: 0,
-            efFrecRespiratoria   = etFr.text.toString().toIntOrNull() ?: 0,
-            efTemperatura        = etTemp.text.toString().toDoubleOrNull() ?: 0.0,
-            efSpo2               = etSpo2.text.toString().toDoubleOrNull() ?: 0.0,
-            efObservaciones      = etEfObs.text.toString()
         )
 
         btnGuardar.isEnabled = false
@@ -216,7 +205,7 @@ class ExpedienteFragment : Fragment() {
     private fun setupSexoDropdown() {
         actvSexo.setAdapter(
             ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line,
-                listOf("Masculino", "Femenino", "Otro"))
+                listOf("Masculino", "Femenino"))
         )
     }
 
@@ -275,12 +264,6 @@ class ExpedienteFragment : Fragment() {
         etTalla          = v.findViewById(R.id.etEfTalla)
         etPeso           = v.findViewById(R.id.etEfPeso)
         etImc            = v.findViewById(R.id.etEfImc)
-        etPa             = v.findViewById(R.id.etEfPa)
-        etFc             = v.findViewById(R.id.etEfFc)
-        etFr             = v.findViewById(R.id.etEfFr)
-        etTemp           = v.findViewById(R.id.etEfTemp)
-        etSpo2           = v.findViewById(R.id.etEfSpo2)
-        etEfObs          = v.findViewById(R.id.etEfObs)
         btnGuardar       = v.findViewById(R.id.btnGuardar)
     }
 }

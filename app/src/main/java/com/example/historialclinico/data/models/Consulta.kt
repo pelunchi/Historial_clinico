@@ -32,3 +32,4 @@ data class Consulta(
     var efSpo2: Double = 0.0,
     var efObservaciones: String = ""
 )
+

@@ -49,6 +49,8 @@
     android:layout_width="0dp"
     android:layout_height="0dp"
 
+    android:paddingBottom="50dp"
+
     app:layout_constraintTop_toBottomOf="@id/header_perfil_nuevo_paciente"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
@@ -110,25 +112,28 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/tilFechaConsulta"
-                            style="@style/CustomInput.Ficha"
+                            style="@style/CustomInput.FichaUnclickeable"
                             android:layout_width="40dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginEnd="6dp"
-
                             android:hint="Fecha de consulta">
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/etFechaConsulta"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:inputType="none"
                                 android:focusable="false"
-                                android:clickable="true"/>
+                                android:focusableInTouchMode="false"
+                                android:clickable="false"
+                                android:longClickable="false"
+                                android:cursorVisible="false"
+                                android:textIsSelectable="false"
+                                android:inputType="none"/>
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/tilHoraConsulta"
-                            style="@style/CustomInput.Ficha"
+                            style="@style/CustomInput.FichaUnclickeable"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -137,8 +142,13 @@
                                 android:id="@+id/etHoraConsulta"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:inputType="textCapCharacters"
-                                android:maxLength="3"/>
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:clickable="false"
+                                android:longClickable="false"
+                                android:cursorVisible="false"
+                                android:textIsSelectable="false"
+                                android:inputType="none"/>
                         </com.google.android.material.textfield.TextInputLayout>
 
                     </LinearLayout>
@@ -329,6 +339,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:hint="IMC (automático)"
+                        app:helperTextTextColor="@color/section_da"
                         app:helperText="Se calcula con talla y peso"
                         app:helperTextEnabled="true">
                         <com.google.android.material.textfield.TextInputEditText
@@ -449,27 +460,29 @@
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
-
-        <!-- ═══ BOTON ═══ -->
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnGuardarConsulta"
-            android:layout_width="match_parent"
-            android:layout_height="47dp"
-            android:text=" + Crear Consulta"
-            android:textSize="18sp"
-            android:textColor="#FFFFFF"
-            app:backgroundTint="@null"
-            style="@style/ButtonPrimary"
-            app:cornerRadius="8dp"
-
-            android:elevation="10dp"
-
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="10dp" />
     </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <!-- ═══ BOTON ═══ -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnGuardarConsulta"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:text=" + Guardar Consulta"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        app:backgroundTint="@null"
+        style="@style/ButtonPrimary"
+        app:cornerRadius="8dp"
+
+        android:elevation="10dp"
+
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

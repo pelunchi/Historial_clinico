@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.historialclinico.R
 import com.example.historialclinico.data.database.ExpedienteRepository
 import com.example.historialclinico.data.database.UserRepository
@@ -15,6 +16,9 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import androidx.recyclerview.widget.RecyclerView
+import com.example.historialclinico.data.database.ConsultaRepository
+import com.example.historialclinico.ui.adapters.ConsultasAdapter
 
 class InicioFragment : Fragment() {
 
@@ -23,7 +27,7 @@ class InicioFragment : Fragment() {
     private lateinit var tvTotalPacientes: TextView
     private lateinit var etBuscar: EditText
     private lateinit var btnNuevoPaciente: Button
-    private lateinit var llUltimasConsultas: LinearLayout
+    private lateinit var llUltimasConsultas: RecyclerView
 
     private val expedienteRepo = ExpedienteRepository()
     private val userRepo = UserRepository()
@@ -43,6 +47,7 @@ class InicioFragment : Fragment() {
         etBuscar           = view.findViewById(R.id.etBuscar)
         btnNuevoPaciente   = view.findViewById(R.id.btnNuevoPaciente)
         llUltimasConsultas = view.findViewById(R.id.llUltimasConsultas)
+        llUltimasConsultas.layoutManager = LinearLayoutManager(requireContext())
 
         // ── Nombre del doctor desde Firebase ──────────────────────────
         viewLifecycleOwner.lifecycleScope.launch {
@@ -56,21 +61,17 @@ class InicioFragment : Fragment() {
         }
 
         // ── Estadísticas y últimas consultas desde Firebase ───────────
+        val consultaRepo = ConsultaRepository()
+
         viewLifecycleOwner.lifecycleScope.launch {
-            expedienteRepo.listarFlow().collectLatest { lista ->
-                // Total de pacientes
-                tvTotalPacientes.text = lista.size.toString()
+            consultaRepo.listarTodasFlow().collectLatest { lista ->
 
-                // Consultas actualizadas hoy
-                val fmt = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-                val hoy = fmt.format(Date())
-                val hoyCount = lista.count { fmt.format(Date(it.fechaActualizacion)) == hoy }
-                tvConsultasHoy.text = hoyCount.toString()
+                val ultimas = lista
+                    .sortedByDescending { it.fechaTimestamp }
+                    .take(5)
 
-                // Últimas 5 consultas
-                llUltimasConsultas.removeAllViews()
-                lista.take(5).forEach { exp ->
-                    agregarItem(exp.nombre, formatFecha(exp.fechaActualizacion))
+                llUltimasConsultas.adapter = ConsultasAdapter(ultimas) { consulta ->
+                    // navegación opcional
                 }
             }
         }
