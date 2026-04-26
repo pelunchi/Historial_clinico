@@ -77,7 +77,7 @@
                 android:layout_height="48dp"
                 android:background="@drawable/avatar_circle"
                 android:gravity="center"
-                android:text="MG"
+                android:text=""
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
@@ -101,7 +101,7 @@
                     android:id="@+id/tvNombrePaciente"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="María González"
+                    android:text=""
                     android:textSize="15sp"
                     android:textStyle="bold"
                     android:textColor="@color/text_primary" />
@@ -111,7 +111,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="45 años | F | O+"
+                    android:text=""
                     android:textColor="@color/text_tertiary"
                     android:textSize="14sp" />
 
