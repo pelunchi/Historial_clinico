@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.HistorialClinico" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.HistorialClinico" parent="Theme.MaterialComponents.Light.NoActionBar">
 
         <item name="android:windowBackground">@color/fondo_principal</item>
         <item name="android:statusBarColor">@color/fondo_principal</item>
 
-        <!-- Color de editor de texto predeterminado -->
         <item name="colorPrimary">@color/borde_formulario_oscuro</item>
         <item name="colorSecondary">@color/primary</item>
     </style>

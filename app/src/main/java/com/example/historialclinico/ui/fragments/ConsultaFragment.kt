@@ -8,14 +8,18 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.historialclinico.R
 import com.example.historialclinico.data.database.ConsultaRepository
 import com.example.historialclinico.data.models.Consulta
 import com.example.historialclinico.data.models.Paciente
+import com.example.historialclinico.ui.activities.MainActivity
+import com.example.historialclinico.ui.viewmodel.AppViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -24,9 +28,10 @@ class ConsultaFragment : Fragment() {
 
     private var paciente: Paciente? = null
     private var consultaId: String = ""
+    private var esNueva = true
     private val repo = ConsultaRepository()
+    private val vm: AppViewModel by activityViewModels()
 
-    // Campos del formulario
     private lateinit var etFecha: TextInputEditText
     private lateinit var etHora: TextInputEditText
     private lateinit var etMotivo: TextInputEditText
@@ -59,53 +64,58 @@ class ConsultaFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        paciente    = arguments?.getSerializable("paciente") as? Paciente
-        consultaId  = arguments?.getString("consultaId") ?: ""
+        paciente   = arguments?.getSerializable("paciente") as? Paciente
+        consultaId = arguments?.getString("consultaId") ?: ""
+        esNueva    = consultaId.isBlank()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.fragment_consulta, container, false)
+    ): View = inflater.inflate(R.layout.fragment_formulario_consulta, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews(view)
         setupImcCalculo()
 
-        // Botón back
         view.findViewById<ImageButton>(R.id.btnBack).setOnClickListener {
             parentFragmentManager.popBackStack()
         }
 
-        // ── Fecha y hora automáticas al crear nueva consulta ───────────
-        if (consultaId.isBlank()) {
+        if (esNueva) {
             val ahora = Date()
             etFecha.setText(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(ahora))
             etHora.setText(SimpleDateFormat("hh:mm a", Locale.getDefault()).format(ahora))
         } else {
-            // Cargar consulta existente para editar
-            cargarConsultaExistente()
+            cargarDesdeCache()
         }
 
         btnGuardar.setOnClickListener { guardar() }
     }
 
-    // ── Cargar consulta existente ───────────────────────────────────────
+    // ── Cargar desde caché del ViewModel ──────────────────────────────
 
-    private fun cargarConsultaExistente() {
+    private fun cargarDesdeCache() {
         val expId = paciente?.id ?: return
         setEstado("⏳ Cargando...", "#1976D2")
         btnGuardar.isEnabled = false
 
+        val enCache = vm.consultasPorPaciente.value[expId]?.find { it.id == consultaId }
+        if (enCache != null) {
+            poblarFormulario(enCache)
+            tvEstado.visibility  = View.GONE
+            btnGuardar.isEnabled = true
+            return
+        }
+        // Fallback: esperar que llegue al caché
         viewLifecycleOwner.lifecycleScope.launch {
-            try {
-                val c = repo.obtener(expId, consultaId)
-                if (c != null) poblarFormulario(c) else setEstado("⚠️ No encontrada", "#F57C00")
-            } catch (e: Exception) {
-                setEstado("❌ Error: ${e.message}", "#D32F2F")
-            } finally {
-                tvEstado.visibility  = View.GONE
-                btnGuardar.isEnabled = true
+            vm.consultasPorPaciente.collect { mapa ->
+                val c = mapa[expId]?.find { it.id == consultaId }
+                if (c != null) {
+                    poblarFormulario(c)
+                    tvEstado.visibility  = View.GONE
+                    btnGuardar.isEnabled = true
+                }
             }
         }
     }
@@ -122,14 +132,14 @@ class ConsultaFragment : Fragment() {
         if (c.efTalla > 0) etTalla.setText(c.efTalla.toString())
         if (c.efPeso  > 0) etPeso.setText(c.efPeso.toString())
         etPa.setText(c.efPresionArterial)
-        if (c.efFrecCardiaca > 0)     etFc.setText(c.efFrecCardiaca.toString())
+        if (c.efFrecCardiaca    > 0) etFc.setText(c.efFrecCardiaca.toString())
         if (c.efFrecRespiratoria > 0) etFr.setText(c.efFrecRespiratoria.toString())
-        if (c.efTemperatura > 0)      etTemp.setText(c.efTemperatura.toString())
-        if (c.efSpo2 > 0)             etSpo2.setText(c.efSpo2.toString())
+        if (c.efTemperatura     > 0) etTemp.setText(c.efTemperatura.toString())
+        if (c.efSpo2            > 0) etSpo2.setText(c.efSpo2.toString())
         etObs.setText(c.efObservaciones)
     }
 
-    // ── Guardar ─────────────────────────────────────────────────────────
+    // ── Guardar ────────────────────────────────────────────────────────
 
     private fun guardar() {
         val expId = paciente?.id
@@ -147,58 +157,61 @@ class ConsultaFragment : Fragment() {
         val imc   = if (talla > 0 && peso > 0) { val m = talla/100.0; peso/(m*m) } else 0.0
 
         val consulta = Consulta(
-            id                = consultaId,
-            expedienteId      = expId,
-            fecha             = etFecha.text.toString(),
-            hora              = etHora.text.toString(),
-            motivo            = etMotivo.text.toString().trim(),
-            sintomas          = etSintomas.text.toString(),
-            diagnostico       = etDiagnostico.text.toString(),
-            resumen           = etResumen.text.toString(),
-            indicaciones      = etIndicaciones.text.toString(),
-            receta            = etReceta.text.toString(),
-            efTalla           = talla,
-            efPeso            = peso,
-            efImc             = imc,
-            efPresionArterial = etPa.text.toString(),
-            efFrecCardiaca    = etFc.text.toString().toIntOrNull() ?: 0,
+            id                 = consultaId,
+            expedienteId       = expId,
+            fecha              = etFecha.text.toString(),
+            hora               = etHora.text.toString(),
+            motivo             = etMotivo.text.toString().trim(),
+            sintomas           = etSintomas.text.toString(),
+            diagnostico        = etDiagnostico.text.toString(),
+            resumen            = etResumen.text.toString(),
+            indicaciones       = etIndicaciones.text.toString(),
+            receta             = etReceta.text.toString(),
+            efTalla            = talla, efPeso = peso, efImc = imc,
+            efPresionArterial  = etPa.text.toString(),
+            efFrecCardiaca     = etFc.text.toString().toIntOrNull() ?: 0,
             efFrecRespiratoria = etFr.text.toString().toIntOrNull() ?: 0,
-            efTemperatura     = etTemp.text.toString().toDoubleOrNull() ?: 0.0,
-            efSpo2            = etSpo2.text.toString().toDoubleOrNull() ?: 0.0,
-            efObservaciones   = etObs.text.toString()
+            efTemperatura      = etTemp.text.toString().toDoubleOrNull() ?: 0.0,
+            efSpo2             = etSpo2.text.toString().toDoubleOrNull() ?: 0.0,
+            efObservaciones    = etObs.text.toString()
         )
 
-        setEstado("⏳ Guardando...", "#1976D2")
         btnGuardar.isEnabled = false
+        btnGuardar.text = "Guardando..."
 
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 consultaId = repo.guardar(consulta)
-                setEstado("✅ Guardado correctamente", "#2E7D32")
+                Snackbar.make(requireView(), "✅ Guardado", Snackbar.LENGTH_SHORT).show()
+                delay(600)
+
+                paciente?.let { p ->
+                    if (esNueva) {
+                        // Nueva consulta → abrir VerConsultaFragment directamente
+                        parentFragmentManager.popBackStack()
+                        (requireActivity() as MainActivity).navegarAVerConsulta(p, consultaId)
+                    } else {
+                        // Edición → solo regresar
+                        parentFragmentManager.popBackStack()
+                    }
+                }
             } catch (e: Exception) {
                 setEstado("❌ Error: ${e.message}", "#D32F2F")
-            } finally {
                 btnGuardar.isEnabled = true
             }
         }
     }
 
-    // ── IMC automático ──────────────────────────────────────────────────
-
     private fun setupImcCalculo() {
         val calc = {
             val t = etTalla.text.toString().toDoubleOrNull() ?: 0.0
             val p = etPeso.text.toString().toDoubleOrNull()  ?: 0.0
-            if (t > 0 && p > 0) {
-                val m = t / 100.0
-                etImc.setText(String.format("%.1f", p / (m * m)))
-            } else etImc.setText("")
+            if (t > 0 && p > 0) { val m = t/100.0; etImc.setText(String.format("%.1f", p/(m*m))) }
+            else etImc.setText("")
         }
         etTalla.addTextChangedListener { calc() }
         etPeso.addTextChangedListener  { calc() }
     }
-
-    // ── Helper estado ───────────────────────────────────────────────────
 
     private fun setEstado(texto: String, color: String) {
         tvEstado.visibility = View.VISIBLE
@@ -206,39 +219,31 @@ class ConsultaFragment : Fragment() {
         tvEstado.setTextColor(android.graphics.Color.parseColor(color))
     }
 
-    // ── Init vistas ─────────────────────────────────────────────────────
-
     private fun initViews(v: View) {
-        etFecha       = v.findViewById(R.id.etFechaConsulta)
-        etHora        = v.findViewById(R.id.etHoraConsulta)
-        etMotivo      = v.findViewById(R.id.etMotivoConsulta)
-        etSintomas    = v.findViewById(R.id.etSintomas)
-        etDiagnostico = v.findViewById(R.id.etDiagnostico)
-        etResumen     = v.findViewById(R.id.etResumenConsulta)
+        etFecha        = v.findViewById(R.id.etFechaConsulta)
+        etHora         = v.findViewById(R.id.etHoraConsulta)
+        etMotivo       = v.findViewById(R.id.etMotivoConsulta)
+        etSintomas     = v.findViewById(R.id.etSintomas)
+        etDiagnostico  = v.findViewById(R.id.etDiagnostico)
+        etResumen      = v.findViewById(R.id.etResumenConsulta)
         etIndicaciones = v.findViewById(R.id.etIndicaciones)
-        etReceta      = v.findViewById(R.id.etReceta)
-        etTalla       = v.findViewById(R.id.etEfTallaConsulta)
-        etPeso        = v.findViewById(R.id.etEfPesoConsulta)
-        etImc         = v.findViewById(R.id.etEfImcConsulta)
-        etPa          = v.findViewById(R.id.etEfPaConsulta)
-        etFc          = v.findViewById(R.id.etEfFcConsulta)
-        etFr          = v.findViewById(R.id.etEfFr)
-        etTemp        = v.findViewById(R.id.etEfTempConsulta)
-        etSpo2        = v.findViewById(R.id.etEfSpo2Consulta)
-        etObs         = v.findViewById(R.id.etEfObsConsulta)
-        btnGuardar    = v.findViewById(R.id.btnGuardarConsulta)
-
-        // tvEstado: reutilizamos el TextInputLayout de notas como fallback visual
-        // o añadimos uno dinámico al contenedor
-        tvEstado = TextView(requireContext()).apply {
-            textSize = 14f
-            setPadding(0, 16, 0, 0)
-            visibility = View.GONE
+        etReceta       = v.findViewById(R.id.etReceta)
+        etTalla        = v.findViewById(R.id.etEfTallaConsulta)
+        etPeso         = v.findViewById(R.id.etEfPesoConsulta)
+        etImc          = v.findViewById(R.id.etEfImcConsulta)
+        etPa           = v.findViewById(R.id.etEfPaConsulta)
+        etFc           = v.findViewById(R.id.etEfFcConsulta)
+        etFr           = v.findViewById(R.id.etEfFr)
+        etTemp         = v.findViewById(R.id.etEfTempConsulta)
+        etSpo2         = v.findViewById(R.id.etEfSpo2Consulta)
+        etObs          = v.findViewById(R.id.etEfObsConsulta)
+        btnGuardar     = v.findViewById(R.id.btnGuardarConsulta)
+        tvEstado       = TextView(requireContext()).apply {
+            textSize = 14f; setPadding(0, 16, 0, 0); visibility = View.GONE
         }
         try {
-            val container = v.findViewById<ViewGroup>(R.id.btnGuardarConsulta)
-                .parent as? ViewGroup
-            container?.addView(tvEstado)
+            (v.findViewById<MaterialButton>(R.id.btnGuardarConsulta).parent as? ViewGroup)
+                ?.addView(tvEstado)
         } catch (_: Exception) {}
     }
 }

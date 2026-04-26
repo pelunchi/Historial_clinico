@@ -8,7 +8,8 @@ import com.example.historialclinico.databinding.ItemConsultaBinding
 
 class ConsultasAdapter(
     private val lista: List<Consulta>,
-    private val onItemClick: (Consulta) -> Unit
+    private val onItemClick: (Consulta) -> Unit,
+    private val onItemLongClick: (Consulta) -> Unit = {}
 ) : RecyclerView.Adapter<ConsultasAdapter.ConsultaViewHolder>() {
 
     inner class ConsultaViewHolder(private val binding: ItemConsultaBinding)
@@ -19,6 +20,10 @@ class ConsultasAdapter(
             binding.tvConsultationReason.text = consulta.motivo.ifBlank { "Sin motivo registrado" }
             binding.tvConsultationTime.text   = consulta.hora
             binding.root.setOnClickListener { onItemClick(consulta) }
+            binding.root.setOnLongClickListener {
+                onItemLongClick(consulta)
+                true
+            }
         }
     }
 

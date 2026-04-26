@@ -11,7 +11,7 @@ data class Expediente(
     var edad: Int = 0,
     var sexo: String = "",
     var fechaNacimiento: String = "",
-    var tipoSangre: String = "",          // ← AÑADIDO
+    var tipoSangre: String = "",
     var curp: String = "",
     var direccion: String = "",
     var telefono: String = "",
@@ -55,6 +55,9 @@ data class Expediente(
     var tratTerapias: String = "",
     var tratNotas: String = "",
     var tratProximaConsulta: String = "",
+
+    // Avatar
+    var avatarColorIndex: Int = -1,   // ← NUEVO: -1 = no asignado aún
 
     // Metadatos
     var userId: String = "",

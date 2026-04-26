@@ -5,7 +5,7 @@ import kotlin.math.absoluteValue
 
 object AvatarColorHelper {
 
-    private val colores = listOf(
+    private val avatarColors = listOf(
         R.color.avatar_yellow,
         R.color.avatar_purple,
         R.color.avatar_red,
@@ -13,8 +13,8 @@ object AvatarColorHelper {
         R.color.avatar_green
     )
 
-    fun colorParaId(id: String): Int =
-        colores[id.hashCode().absoluteValue % colores.size]
+    fun avatarColorRes(position: Int): Int = avatarColors[position % avatarColors.size]
 
-    fun colorAleatorio(): Int = colores.random()
+    fun avatarIniciales(nombre: String): String =
+        nombre.split(" ").take(2).joinToString("") { it.firstOrNull()?.toString() ?: "" }.uppercase()
 }

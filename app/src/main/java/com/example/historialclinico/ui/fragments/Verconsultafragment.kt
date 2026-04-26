@@ -9,30 +9,26 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.historialclinico.R
-import com.example.historialclinico.data.database.ConsultaRepository
 import com.example.historialclinico.data.models.Consulta
 import com.example.historialclinico.data.models.Paciente
 import com.example.historialclinico.ui.activities.MainActivity
+import com.example.historialclinico.ui.viewmodel.AppViewModel
 import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import com.example.historialclinico.ui.utils.AvatarColorHelper.avatarIniciales
+import com.example.historialclinico.ui.utils.AvatarColorHelper.avatarColorRes
 import kotlin.math.absoluteValue
+import com.example.historialclinico.ui.fragments.PacientePerfilFragment
 
 class VerConsultaFragment : Fragment() {
 
     private var paciente: Paciente? = null
     private var consultaId: String = ""
-
-    private val repo = ConsultaRepository()
-
-    private val avatarColors = listOf(
-        R.color.avatar_yellow,
-        R.color.avatar_purple,
-        R.color.avatar_red,
-        R.color.avatar_blue,
-        R.color.avatar_green
-    )
+    private val vm: AppViewModel by activityViewModels()
 
     companion object {
         fun newInstance(paciente: Paciente, consultaId: String) =
@@ -58,9 +54,21 @@ class VerConsultaFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         llenarHeader(view)
-        cargarConsulta(view)
+
+        // Buscar la consulta en el caché del ViewModel — sin red
+        viewLifecycleOwner.lifecycleScope.launch {
+            vm.consultasPorPaciente.collectLatest { mapa ->
+                val consulta = mapa[paciente?.id]?.find { it.id == consultaId }
+                if (consulta != null) llenarVistas(view, consulta)
+            }
+        }
 
         view.findViewById<ImageButton>(R.id.btnBack).setOnClickListener {
+            val bundle = Bundle().apply {
+                putBoolean("mostrarConsultas", true)
+            }
+
+            parentFragmentManager.setFragmentResult("key_consultas", bundle)
             parentFragmentManager.popBackStack()
         }
 
@@ -71,43 +79,23 @@ class VerConsultaFragment : Fragment() {
         }
     }
 
-    // ── Header del paciente ────────────────────────────────────────────
-
     private fun llenarHeader(view: View) {
         val p = paciente ?: return
-
-        val iniciales = p.nombre.split(" ")
-            .take(2).joinToString("") { it.firstOrNull()?.toString() ?: "" }.uppercase()
-
         val tvIniciales = view.findViewById<TextView>(R.id.tvAvatarInitials)
-        tvIniciales.text = iniciales
-
-        val colorRes = avatarColors[p.id.hashCode().absoluteValue % avatarColors.size]
-        val color    = ContextCompat.getColor(requireContext(), colorRes)
-        tvIniciales.backgroundTintList = ColorStateList.valueOf(color)
-
+        tvIniciales.text = avatarIniciales(p.nombre)       // ← cambia esto
+        val colorRes = p.avatarColorRes                    // ← y esto
+        tvIniciales.backgroundTintList =
+            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), colorRes))
         view.findViewById<TextView>(R.id.tvNombrePaciente).text = p.nombre
 
-        val tipoSangre = if (p.tipoSangre.isNotBlank()) " | ${p.tipoSangre}" else ""
-        view.findViewById<TextView>(R.id.tvInfoPaciente).text =
-            "${p.edad} años | ${p.sexo}$tipoSangre"
-    }
-
-    // ── Cargar datos desde Firebase ────────────────────────────────────
-
-    private fun cargarConsulta(view: View) {
-        val expId = paciente?.id ?: return
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            try {
-                val consulta = repo.obtener(expId, consultaId) ?: return@launch
-                llenarVistas(view, consulta)
-            } catch (_: Exception) {}
-        }
+        val partes = mutableListOf<String>()
+        if (p.edad > 0) partes.add("${p.edad} años")
+        if (p.sexo.isNotBlank()) partes.add(p.sexo)
+        if (p.tipoSangre.isNotBlank()) partes.add(p.tipoSangre)
+        view.findViewById<TextView>(R.id.tvInfoPaciente).text = partes.joinToString(" | ")
     }
 
     private fun llenarVistas(view: View, c: Consulta) {
-        // Información de consulta
         set(view, R.id.tvFechaConsulta,    c.fecha.ifBlank { "—" })
         set(view, R.id.tvHoraConsulta,     c.hora.ifBlank { "—" })
         set(view, R.id.tvMotivoConsulta,   c.motivo.ifBlank { "—" })
@@ -116,8 +104,6 @@ class VerConsultaFragment : Fragment() {
         set(view, R.id.tvNotasConsulta,    c.resumen.ifBlank { "—" })
         set(view, R.id.tvIndicacionesConsulta, c.indicaciones.ifBlank { "—" })
         set(view, R.id.tvRecetaConsulta,   c.receta.ifBlank { "—" })
-
-        // Exploración física
         set(view, R.id.tvAlturaConsulta,   if (c.efTalla > 0) "${c.efTalla} cm" else "—")
         set(view, R.id.tvPesoConsulta,     if (c.efPeso  > 0) "${c.efPeso} kg"  else "—")
         set(view, R.id.tvIMCConsulta,      if (c.efImc   > 0) String.format("%.1f", c.efImc) else "—")

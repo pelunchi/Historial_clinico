@@ -115,14 +115,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
-                    android:textSize="13sp"
-                    android:textColor="@color/text_primary"
-                    android:paddingBottom="6dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="✅ Acceso seguro con cuenta de correo"
                     android:textSize="13sp"
                     android:textColor="@color/text_primary" />
@@ -140,7 +132,7 @@
             android:textColor="#FFFFFF"
             android:textAllCaps="false"
             app:backgroundTint="@color/btn_danger"
-            app:cornerRadius="12dp"
+            app:cornerRadius="8dp"
             app:elevation="10dp"/>
 
     </LinearLayout>

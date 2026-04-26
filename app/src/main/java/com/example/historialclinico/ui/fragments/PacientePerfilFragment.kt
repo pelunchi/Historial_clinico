@@ -11,43 +11,37 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.historialclinico.R
-import com.example.historialclinico.data.database.ConsultaRepository
-import com.example.historialclinico.data.database.ExpedienteRepository
 import com.example.historialclinico.data.models.Expediente
 import com.example.historialclinico.data.models.Paciente
 import com.example.historialclinico.ui.activities.MainActivity
 import com.example.historialclinico.ui.adapters.ConsultasAdapter
+import com.example.historialclinico.ui.viewmodel.AppViewModel
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlin.math.absoluteValue
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
+
 
 class PacientePerfilFragment : Fragment() {
 
-    private lateinit var paciente: Paciente
+    private var paciente: Paciente = Paciente()
+    private val vm: AppViewModel by activityViewModels()
 
     private lateinit var btnExpediente: Button
     private lateinit var btnConsultas: Button
     private lateinit var layoutExpediente: LinearLayout
+
+    private lateinit var layoutSinConsultas: LinearLayout
     private lateinit var layoutConsultas: LinearLayout
     private lateinit var btnEditarExpediente: MaterialButton
     private lateinit var btnNuevaConsulta: MaterialButton
     private lateinit var rvConsultas: RecyclerView
-
-    private val expRepo      = ExpedienteRepository()
-    private val consultaRepo = ConsultaRepository()
-
-    private val avatarColors = listOf(
-        R.color.avatar_yellow,
-        R.color.avatar_purple,
-        R.color.avatar_red,
-        R.color.avatar_blue,
-        R.color.avatar_green
-    )
 
     private val colorVerde      = 0xFF1D9E75.toInt()
     private val colorVerdeTexto = 0xFF2E7D32.toInt()
@@ -71,50 +65,88 @@ class PacientePerfilFragment : Fragment() {
     ): View? = inflater.inflate(R.layout.fragment_paciente_perfil, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        parentFragmentManager.setFragmentResultListener("key_consultas", viewLifecycleOwner) { _, bundle ->
+            val mostrar = bundle.getBoolean("mostrarConsultas", false)
+            if (mostrar) mostrarConsultas()
+        }
         super.onViewCreated(view, savedInstanceState)
+
         enlazarVistas(view)
-        llenarHeader(view)
+        llenarHeader(view)   // muestra lo que tiene por ahora
         configurarBotones()
         mostrarExpediente()
 
-        if (paciente.id.isNotBlank()) {
-            cargarExpediente(view)
-            cargarConsultas()
+        // Expediente — del caché, sin esperar red
+        viewLifecycleOwner.lifecycleScope.launch {
+            vm.expedientes.collectLatest { lista ->
+                val exp = lista.find { it.id == paciente.id } ?: return@collectLatest
+                actualizarSubtitulo(view, exp.edad, exp.sexo, exp.tipoSangre)
+                llenarDatosExpediente(view, exp)
+
+                // Actualizar avatar con el color e iniciales correctos desde Firebase
+                val pacienteActualizado = vm.pacienteConColor(exp.id)
+                if (pacienteActualizado != null) {
+                    paciente = pacienteActualizado   // ← actualiza la referencia local
+                    llenarHeader(view)
+                }
+            }
+        }
+
+        // Consultas del paciente — del caché
+        rvConsultas.layoutManager = LinearLayoutManager(requireContext())
+        viewLifecycleOwner.lifecycleScope.launch {
+            vm.consultasPorPaciente.collectLatest { mapa ->
+                val consultas = mapa[paciente.id] ?: emptyList()
+
+                // Mostrar u ocultar estado vacío
+                layoutSinConsultas.visibility = if (consultas.isEmpty()) View.VISIBLE else View.GONE
+                rvConsultas.visibility        = if (consultas.isEmpty()) View.GONE   else View.VISIBLE
+
+                rvConsultas.adapter = ConsultasAdapter(
+                    consultas,
+                    onItemClick = { consulta ->
+                        (requireActivity() as MainActivity).navegarAVerConsulta(paciente, consulta.id)
+                    },
+                    onItemLongClick = { consulta ->
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Eliminar consulta")
+                            .setMessage("¿Eliminar la consulta del ${consulta.fecha}?\nEsta acción no se puede deshacer.")
+                            .setNegativeButton("Cancelar", null)
+                            .setPositiveButton("Eliminar") { _, _ ->
+                                viewLifecycleOwner.lifecycleScope.launch {
+                                    try {
+                                        vm.eliminarConsulta(paciente.id, consulta.id)
+                                        Snackbar.make(requireView(), "Consulta eliminada", Snackbar.LENGTH_SHORT).show()
+                                    } catch (e: Exception) {
+                                        Snackbar.make(requireView(), "Error al eliminar", Snackbar.LENGTH_LONG).show()
+                                    }
+                                }
+                            }
+                            .show()
+                    }
+                )
+            }
         }
     }
 
     // ── Header ──────────────────────────────────────────────────────────
 
     private fun llenarHeader(view: View) {
-        val iniciales = paciente.nombre.split(" ")
-            .take(2).joinToString("") { it.firstOrNull()?.toString() ?: "" }.uppercase()
-
         val tvIniciales = view.findViewById<TextView>(R.id.tvAvatarInitials)
-        tvIniciales.text = iniciales
-
-        val colorRes = avatarColors[paciente.id.hashCode().absoluteValue % avatarColors.size]
-        val color    = ContextCompat.getColor(requireContext(), colorRes)
-        tvIniciales.backgroundTintList = ColorStateList.valueOf(color)
-
+        tvIniciales.text = paciente.iniciales   // ← en vez de avatarIniciales(paciente.nombre)
+        val colorRes = paciente.avatarColorRes
+        tvIniciales.backgroundTintList =
+            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), colorRes))
         view.findViewById<TextView>(R.id.tvNombrePaciente).text = paciente.nombre
         actualizarSubtitulo(view, paciente.edad, paciente.sexo, paciente.tipoSangre)
     }
 
     private fun actualizarSubtitulo(view: View, edad: Int, sexo: String, tipoSangre: String) {
-        val sangre = if (tipoSangre.isNotBlank()) " | $tipoSangre" else ""
-        view.findViewById<TextView>(R.id.tvInfoPaciente).text = "${edad} años | ${sexo}$sangre"
-    }
-
-    // ── Expediente ───────────────────────────────────────────────────────
-
-    private fun cargarExpediente(view: View) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            try {
-                val exp = expRepo.obtener(paciente.id) ?: return@launch
-                actualizarSubtitulo(view, exp.edad, exp.sexo, exp.tipoSangre)
-                llenarDatosExpediente(view, exp)
-            } catch (_: Exception) {}
-        }
+        val partes = mutableListOf<String>()
+        if (edad > 0) partes.add("$edad años")
+        if (sexo.isNotBlank()) partes.add(sexo)
+        if (tipoSangre.isNotBlank()) partes.add(tipoSangre)
+        view.findViewById<TextView>(R.id.tvInfoPaciente).text = partes.joinToString(" | ")
     }
 
     private fun llenarDatosExpediente(view: View, exp: Expediente) {
@@ -126,7 +158,6 @@ class PacientePerfilFragment : Fragment() {
         set(view, R.id.tvPeso,   if (exp.efPeso  > 0) "${exp.efPeso} kg"  else "—")
         set(view, R.id.tvIMC,    if (exp.efImc   > 0)
             String.format("%.1f  (${exp.categoriaImc()})", exp.efImc) else "—")
-
         val ahf = buildString {
             if (exp.ahfDiabetes)     append("Diabetes, ")
             if (exp.ahfHipertension) append("Hipertensión, ")
@@ -148,22 +179,6 @@ class PacientePerfilFragment : Fragment() {
         try { view.findViewById<TextView>(id)?.text = text } catch (_: Exception) {}
     }
 
-    // ── Consultas — click abre VerConsultaFragment ──────────────────────
-
-    private fun cargarConsultas() {
-        rvConsultas.layoutManager = LinearLayoutManager(requireContext())
-        viewLifecycleOwner.lifecycleScope.launch {
-            consultaRepo.listarFlow(paciente.id).collectLatest { consultas ->
-                rvConsultas.adapter = ConsultasAdapter(consultas) { consulta ->
-                    (requireActivity() as MainActivity)
-                        .navegarAVerConsulta(paciente, consulta.id)   // ← ver, no editar
-                }
-            }
-        }
-    }
-
-    // ── Vistas ─────────────────────────────────────────────────────────
-
     private fun enlazarVistas(view: View) {
         btnExpediente       = view.findViewById(R.id.btnExpediente)
         btnConsultas        = view.findViewById(R.id.btnConsultas)
@@ -172,9 +187,8 @@ class PacientePerfilFragment : Fragment() {
         btnEditarExpediente = view.findViewById(R.id.btnEditarExpediente)
         btnNuevaConsulta    = view.findViewById(R.id.btnNuevaConsulta)
         rvConsultas         = view.findViewById(R.id.rvConsultas)
+        layoutSinConsultas = view.findViewById(R.id.layoutSinConsultas)
     }
-
-    // ── Botones ─────────────────────────────────────────────────────────
 
     private fun configurarBotones() {
         view?.findViewById<ImageButton>(R.id.btnBack)?.setOnClickListener {
@@ -189,8 +203,6 @@ class PacientePerfilFragment : Fragment() {
             (requireActivity() as MainActivity).navegarAConsulta(paciente, consultaId = null)
         }
     }
-
-    // ── Tabs ────────────────────────────────────────────────────────────
 
     private fun mostrarExpediente() {
         layoutExpediente.visibility    = View.VISIBLE

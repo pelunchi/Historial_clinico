@@ -14,7 +14,7 @@ data class Paciente(
 
     val iniciales: String
         get() {
-            val partes = nombre.trim().split(" ")
+            val partes = nombre.trim().split(" ").filter { it.isNotBlank() }
             return when {
                 partes.size >= 2 -> "${partes[0].first()}${partes[1].first()}".uppercase()
                 partes.isNotEmpty() -> partes[0].take(2).uppercase()
