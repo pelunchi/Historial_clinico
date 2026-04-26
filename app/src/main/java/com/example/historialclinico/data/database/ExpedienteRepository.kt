@@ -8,12 +8,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
-/**
- * Estructura en Firebase:
- *   expedientes/
- *     {uid_medico}/
- *       {id_expediente}/ ← campos del Expediente
- */
 class ExpedienteRepository {
     private val auth = FirebaseAuth.getInstance()
     private val db   = FirebaseDatabase.getInstance().reference
@@ -25,12 +19,30 @@ class ExpedienteRepository {
     }
 
     suspend fun guardar(expediente: Expediente): String {
-        val ref = if (expediente.id.isBlank()) refUsuario().push()
-                  else refUsuario().child(expediente.id)
+        val esNuevo = expediente.id.isBlank()
+        val ref = if (esNuevo) refUsuario().push()
+        else refUsuario().child(expediente.id)
         val id = ref.key ?: throw Exception("Error generando ID")
+
+        val colorIndex = if (esNuevo && expediente.avatarColorIndex < 0) {
+            // Obtener el color del último paciente creado
+            val snapshot = refUsuario().get().await()
+            val ultimoColor = snapshot.children
+                .mapNotNull { it.getValue(Expediente::class.java) }
+                .maxByOrNull { it.fechaCreacion }
+                ?.avatarColorIndex ?: -1
+
+            // Elegir aleatoriamente entre los 4 colores restantes
+            val coloresDisponibles = (0..4).filter { it != ultimoColor }
+            coloresDisponibles.random()
+        } else {
+            expediente.avatarColorIndex
+        }
+
         val datos = expediente.copy(
-            id                 = id,
-            userId             = auth.currentUser?.uid ?: "",
+            id               = id,
+            userId           = auth.currentUser?.uid ?: "",
+            avatarColorIndex = colorIndex
         )
         ref.setValue(datos).await()
         return id
@@ -46,7 +58,7 @@ class ExpedienteRepository {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val lista = snapshot.children
                     .mapNotNull { it.getValue(Expediente::class.java) }
-                    .sortedByDescending { it.fechaActualizacion }
+                    .sortedBy { it.nombre.lowercase() }   // ← cambia esta línea
                 trySend(lista)
             }
             override fun onCancelled(error: DatabaseError) { close(error.toException()) }
@@ -58,4 +70,18 @@ class ExpedienteRepository {
     suspend fun eliminar(idExpediente: String) {
         refUsuario().child(idExpediente).removeValue().await()
     }
+
+    /** Lee todos los expedientes una sola vez (sin listener) */
+    suspend fun listarUnaVez(): List<Expediente> {
+        val snapshot = refUsuario().get().await()
+        return snapshot.children
+            .mapNotNull { it.getValue(Expediente::class.java) }
+    }
+
+    /** Actualiza solo el campo avatarColorIndex sin tocar el resto del expediente */
+    suspend fun actualizarColorIndex(expedienteId: String, colorIndex: Int) {
+        refUsuario().child(expedienteId).child("avatarColorIndex")
+            .setValue(colorIndex).await()
+    }
+
 }

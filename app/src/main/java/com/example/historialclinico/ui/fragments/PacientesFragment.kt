@@ -8,44 +8,37 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.historialclinico.R
 import com.example.historialclinico.data.database.ConsultaRepository
 import com.example.historialclinico.data.database.ExpedienteRepository
-import com.example.historialclinico.data.models.Expediente
 import com.example.historialclinico.data.models.Paciente
 import com.example.historialclinico.databinding.FragmentPacientesBinding
 import com.example.historialclinico.ui.activities.MainActivity
 import com.example.historialclinico.ui.adapters.PacientesAdapter
+import com.example.historialclinico.ui.viewmodel.AppViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlin.math.absoluteValue
 
 class PacientesFragment : Fragment() {
 
     private var _binding: FragmentPacientesBinding? = null
     private val binding get() = _binding!!
 
+    private val vm: AppViewModel by activityViewModels()
+
     private lateinit var adapter: PacientesAdapter
     private val listaPacientes = mutableListOf<Paciente>()
     private val listaFiltrada  = mutableListOf<Paciente>()
 
-    private val expRepo     = ExpedienteRepository()
+    private val expRepo      = ExpedienteRepository()
     private val consultaRepo = ConsultaRepository()
 
-    private val avatarColors = listOf(
-        R.color.avatar_yellow,
-        R.color.avatar_purple,
-        R.color.avatar_red,
-        R.color.avatar_blue,
-        R.color.avatar_green
-    )
-
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPacientesBinding.inflate(inflater, container, false)
         return binding.root
@@ -56,105 +49,93 @@ class PacientesFragment : Fragment() {
         configurarRecyclerView()
         configurarBusqueda()
         configurarBotones()
-        cargarDesdeFirebase()
-    }
 
-    // ── Firebase ───────────────────────────────────────────────────────
-
-    private fun cargarDesdeFirebase() {
         viewLifecycleOwner.lifecycleScope.launch {
-            expRepo.listarFlow().collectLatest { expedientes ->
+            vm.expedientes.collectLatest {
                 listaPacientes.clear()
-                listaPacientes.addAll(expedientes.map { it.toPaciente() })
+                listaPacientes.addAll(vm.pacientesConColor())
                 filtrarPacientes(binding.etBuscar.text.toString())
             }
         }
     }
 
-    private fun Expediente.toPaciente() = Paciente(
-        id             = id,
-        nombre         = nombre,
-        edad           = edad,
-        sexo           = if (sexo.startsWith("F", ignoreCase = true)) "F" else "M",
-        tipoSangre     = tipoSangre,   // ← pasa el tipo de sangre real
-        avatarColorRes = avatarColors[id.hashCode().absoluteValue % avatarColors.size]
-    )
-
-    // ── RecyclerView ───────────────────────────────────────────────────
-
     private fun configurarRecyclerView() {
         adapter = PacientesAdapter(
-            lista         = listaFiltrada,
-            onItemClick   = { paciente ->
+            lista           = listaFiltrada,
+            onItemClick     = { paciente ->
                 val fragment = PacientePerfilFragment.newInstance(paciente)
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.fragmentContainer, fragment)
                     .addToBackStack(null)
                     .commit()
             },
-            onItemLongClick = { paciente ->
-                mostrarDialogoEliminar(paciente)
-            }
+            onItemLongClick = { paciente -> mostrarDialogoEliminar(paciente) }
         )
         binding.rvPacientes.layoutManager = LinearLayoutManager(requireContext())
         binding.rvPacientes.adapter = adapter
     }
 
-    // ── Eliminar ───────────────────────────────────────────────────────
-
-    /**
-     * Muestra un AlertDialog para confirmar la eliminación.
-     * Se activa tanto por long-press en la tarjeta como por btnEliminar.
-     */
     private fun mostrarDialogoEliminar(paciente: Paciente? = null) {
         if (listaPacientes.isEmpty()) {
             Snackbar.make(requireView(), "No hay pacientes para eliminar", Snackbar.LENGTH_SHORT).show()
             return
         }
-
         if (paciente != null) {
-            // Eliminar el paciente específico (vino de long-press)
-            confirmarEliminar(paciente)
+            // Desde long click — confirmar solo ese
+            confirmarEliminar(listOf(paciente))
         } else {
-            // Vino del botón "Eliminar paciente" → mostrar lista para seleccionar
+            // Desde botón — selección múltiple
             val nombres = listaPacientes.map { it.nombre }.toTypedArray()
-            var seleccionado = 0
+            val seleccionados = mutableListOf<Paciente>()
 
             AlertDialog.Builder(requireContext())
-                .setTitle("Selecciona el paciente a eliminar")
-                .setSingleChoiceItems(nombres, 0) { _, which -> seleccionado = which }
+                .setTitle("Selecciona pacientes a eliminar")
+                .setMultiChoiceItems(nombres, null) { _, which, isChecked ->
+                    if (isChecked) seleccionados.add(listaPacientes[which])
+                    else seleccionados.remove(listaPacientes[which])
+                }
                 .setPositiveButton("Continuar") { _, _ ->
-                    confirmarEliminar(listaPacientes[seleccionado])
+                    if (seleccionados.isEmpty()) {
+                        Snackbar.make(requireView(), "No seleccionaste ningún paciente", Snackbar.LENGTH_SHORT).show()
+                    } else {
+                        confirmarEliminar(seleccionados)
+                    }
                 }
                 .setNegativeButton("Cancelar", null)
                 .show()
         }
     }
 
-    private fun confirmarEliminar(paciente: Paciente) {
+    private fun confirmarEliminar(pacientes: List<Paciente>) {
+        val mensaje = if (pacientes.size == 1)
+            "¿Eliminar a ${pacientes[0].nombre}?\n\nSe borrarán el expediente y todas sus consultas."
+        else
+            "¿Eliminar a ${pacientes.size} pacientes?\n\nSe borrarán sus expedientes y todas sus consultas."
+
         AlertDialog.Builder(requireContext())
-            .setTitle("Eliminar paciente")
-            .setMessage("¿Eliminar a ${paciente.nombre}?\n\nSe borrarán el expediente y todas sus consultas. Esta acción no se puede deshacer.")
-            .setPositiveButton("Eliminar") { _, _ -> eliminarPaciente(paciente) }
+            .setTitle("Eliminar paciente${if (pacientes.size > 1) "s" else ""}")
+            .setMessage(mensaje)
+            .setPositiveButton("Eliminar") { _, _ ->
+                viewLifecycleOwner.lifecycleScope.launch {
+                    var errores = 0
+                    pacientes.forEach { p ->
+                        try {
+                            expRepo.eliminar(p.id)
+                            try { consultaRepo.eliminarTodas(p.id) } catch (_: Exception) {}
+                        } catch (_: Exception) {
+                            errores++
+                        }
+                    }
+                    val msg = if (errores == 0)
+                        if (pacientes.size == 1) "Paciente eliminado" else "${pacientes.size} pacientes eliminados"
+                    else
+                        "Se eliminaron ${pacientes.size - errores} de ${pacientes.size} pacientes"
+                    Snackbar.make(requireView(), msg, Snackbar.LENGTH_SHORT).show()
+                }
+            }
             .setNegativeButton("Cancelar", null)
             .show()
     }
-
-    private fun eliminarPaciente(paciente: Paciente) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            try {
-                // Eliminar expediente
-                expRepo.eliminar(paciente.id)
-                // Eliminar todas sus consultas
-                try { consultaRepo.eliminarTodas(paciente.id) } catch (_: Exception) {}
-                Snackbar.make(requireView(), "Paciente eliminado", Snackbar.LENGTH_SHORT).show()
-            } catch (e: Exception) {
-                Snackbar.make(requireView(), "Error al eliminar: ${e.message}", Snackbar.LENGTH_LONG).show()
-            }
-        }
-    }
-
-    // ── Búsqueda ───────────────────────────────────────────────────────
 
     private fun configurarBusqueda() {
         binding.etBuscar.addTextChangedListener(object : TextWatcher {
@@ -171,15 +152,16 @@ class PacientesFragment : Fragment() {
             else listaPacientes.filter { it.nombre.contains(query, ignoreCase = true) }
         )
         adapter.notifyDataSetChanged()
-    }
 
-    // ── Botones ────────────────────────────────────────────────────────
+        // Mostrar u ocultar estado vacío
+        binding.layoutSinPacientes.visibility = if (listaFiltrada.isEmpty()) View.VISIBLE else View.GONE
+        binding.rvPacientes.visibility        = if (listaFiltrada.isEmpty()) View.GONE   else View.VISIBLE
+    }
 
     private fun configurarBotones() {
         binding.btnNuevoPaciente.setOnClickListener {
             (requireActivity() as MainActivity).navegarAExpediente(pacienteId = null)
         }
-        // Botón "Eliminar paciente" → abre selector de pacientes
         binding.btnEliminar.setOnClickListener {
             mostrarDialogoEliminar(paciente = null)
         }

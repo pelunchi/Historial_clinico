@@ -24,7 +24,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bienvenido"
+            android:text="Bienvenid(a)"
             android:textColor="#6B7280"
             android:textSize="14sp"/>
 
@@ -191,6 +191,47 @@
         app:layout_constraintTop_toBottomOf="@id/resumenCartas"
         app:layout_constraintStart_toStartOf="parent"
         />
+
+    <!-- Estado vacío inicio -->
+    <LinearLayout
+        android:id="@+id/layoutSinDatos"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingHorizontal="32dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/resumenCartas"
+        app:layout_constraintBottom_toTopOf="@id/btnNuevoPaciente"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📊"
+            android:textSize="52sp"
+            android:layout_marginBottom="12dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sin información aún"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#1A1A1A"
+            android:layout_marginBottom="6dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Aquí verás las últimas consultas una vez que registres pacientes y consultas."
+            android:textSize="13sp"
+            android:textColor="#888888"
+            android:gravity="center"
+            android:lineSpacingExtra="3dp"/>
+
+    </LinearLayout>
 
     <!-- Button Nuevo Paciente -->
     <com.google.android.material.button.MaterialButton

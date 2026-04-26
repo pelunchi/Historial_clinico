@@ -31,20 +31,17 @@ class PacientesAdapter(
             binding.tvAvatarInitials.text = paciente.iniciales
             binding.tvNombrePaciente.text = paciente.nombre
 
-            // Mostrar tipo de sangre si existe
-            val tipoSangre = if (paciente.tipoSangre.isNotBlank()) " | ${paciente.tipoSangre}" else ""
-            binding.tvInfoPaciente.text = "${paciente.edad} años | ${paciente.sexo}$tipoSangre"
+            val partes = mutableListOf<String>()
+            if (paciente.edad > 0) partes.add("${paciente.edad} años")
+            if (paciente.sexo.isNotBlank()) partes.add(paciente.sexo)
+            if (paciente.tipoSangre.isNotBlank()) partes.add(paciente.tipoSangre)
+            binding.tvInfoPaciente.text = partes.joinToString(" | ")
 
-            // Color determinístico por ID — siempre el mismo para el mismo paciente
-            val colorRes = avatarColors[paciente.id.hashCode().absoluteValue % avatarColors.size]
-            val color = ContextCompat.getColor(binding.root.context, colorRes)
+            val color = ContextCompat.getColor(binding.root.context, paciente.avatarColorRes)
             binding.tvAvatarInitials.backgroundTintList = ColorStateList.valueOf(color)
 
             binding.root.setOnClickListener { onItemClick(paciente) }
-            binding.root.setOnLongClickListener {
-                onItemLongClick(paciente)
-                true
-            }
+            binding.root.setOnLongClickListener { onItemLongClick(paciente); true }
         }
     }
 

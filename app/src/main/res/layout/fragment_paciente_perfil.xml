@@ -501,16 +501,56 @@
                 android:clipChildren="false"
                 android:visibility="gone">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvConsultas"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="20dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="50dp"
-                android:clipToPadding="false"
-                android:clipChildren="false"
-                android:nestedScrollingEnabled="false"/>
+                <!-- Estado vacío — se muestra cuando no hay consultas -->
+                <LinearLayout
+                    android:id="@+id/layoutSinConsultas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:paddingTop="48dp"
+                    android:paddingBottom="32dp"
+                    android:paddingHorizontal="32dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📋"
+                        android:textSize="48sp"
+                        android:layout_marginBottom="12dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sin consultas registradas"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#1A1A1A"
+                        android:layout_marginBottom="6dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Aún no hay ninguna consulta para este paciente. Crea la primera con el botón de abajo."
+                        android:textSize="13sp"
+                        android:textColor="#888888"
+                        android:gravity="center"
+                        android:lineSpacingExtra="3dp"/>
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvConsultas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="20dp"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="50dp"
+                    android:clipToPadding="false"
+                    android:clipChildren="false"
+                    android:nestedScrollingEnabled="false"/>
+
             </LinearLayout>
 
         </LinearLayout>
