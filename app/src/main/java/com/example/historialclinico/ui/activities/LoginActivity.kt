@@ -11,6 +11,10 @@ import androidx.cardview.widget.CardView
 import com.example.historialclinico.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.userProfileChangeRequest
+
 
 class LoginActivity : AppCompatActivity() {
 
@@ -35,19 +39,41 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var editTextConfirmPassword: TextInputEditText
     private lateinit var buttonRegister: com.google.android.material.button.MaterialButton
 
+    // Biometria
+    private lateinit var buttonBiometric: com.google.android.material.button.MaterialButton
+    private lateinit var sharedPrefs: android.content.SharedPreferences
+    private val PREFS_NAME = "historial_prefs"
+    private val KEY_BIOMETRIC = "biometric_enabled"
+    private val KEY_EMAIL = "saved_email"
+    private val KEY_PASSWORD = "saved_password"
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
         auth = FirebaseAuth.getInstance()
+        sharedPrefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
 
-        // Si ya hay sesión activa, ir directo al home
+
+        initViews()
         if (auth.currentUser != null) {
-            goToMain()
+            // Mostrar boton de huella si ya esta activado
+            if (sharedPrefs.getBoolean(KEY_BIOMETRIC, false)) {
+                showBiometricButton()
+                showBiometricPrompt()
+            } else {
+                goToMain()
+            }
             return
         }
 
-        initViews()
+        // Mostrar boton si no hay sesion activa pero ya activó huella antes
+        if (sharedPrefs.getBoolean(KEY_BIOMETRIC, false)) {
+            showBiometricButton()
+            showBiometricPrompt()
+        }
+
         setupListeners()
         showLoginTab()
     }
@@ -66,6 +92,7 @@ class LoginActivity : AppCompatActivity() {
         editTextPasswordRegister = findViewById(R.id.editTextPasswordRegister)
         editTextConfirmPassword  = findViewById(R.id.editTextConfirmPassword)
         buttonRegister           = findViewById(R.id.buttonRegister)
+        buttonBiometric = findViewById(R.id.buttonBiometric)
     }
 
     private fun setupListeners() {
@@ -83,7 +110,8 @@ class LoginActivity : AppCompatActivity() {
             val email    = editTextEmailRegister.text.toString().trim()
             val password = editTextPasswordRegister.text.toString().trim()
             val confirm  = editTextConfirmPassword.text.toString().trim()
-            if (validateRegister(name, email, password, confirm)) register(email, password)
+
+            if (validateRegister(name, email, password, confirm)) register(name, email, password)
         }
 
         textViewForgotPassword.setOnClickListener {
@@ -111,26 +139,48 @@ class LoginActivity : AppCompatActivity() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnSuccessListener {
                 Toast.makeText(this, "¡Bienvenido!", Toast.LENGTH_SHORT).show()
-                goToMain()
+                // Preguntar si quiere activar huella (solo la primera vez)
+                if (!sharedPrefs.getBoolean(KEY_BIOMETRIC, false)) {
+                    askToEnableBiometric(email, password)
+                } else {
+                    goToMain()
+                }
             }
-            .addOnFailureListener {
-                Toast.makeText(this, "Credenciales incorrectas", Toast.LENGTH_LONG).show()
+            .addOnFailureListener { exception ->
+                // Mensajes de error específicos
+                val mensaje = when (exception) {
+                    is FirebaseAuthInvalidUserException -> "No existe una cuenta con ese correo"
+                    is FirebaseAuthInvalidCredentialsException -> "Contraseña incorrecta"
+                    else -> "Error al iniciar sesión. Verifica tu conexión"
+                }
+                Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show()
                 buttonLogin.isEnabled = true
                 buttonLogin.text = "Iniciar Sesión"
             }
     }
 
-    private fun register(email: String, password: String) {
+    private fun register(name: String, email: String, password: String) {
         buttonRegister.isEnabled = false
         buttonRegister.text = "Creando cuenta..."
 
         auth.createUserWithEmailAndPassword(email, password)
-            .addOnSuccessListener {
-                Toast.makeText(this, "¡Cuenta creada!", Toast.LENGTH_SHORT).show()
-                goToMain()
+            .addOnSuccessListener { result ->
+                val profileUpdates = userProfileChangeRequest {
+                    displayName = name
+                }
+                result.user?.updateProfile(profileUpdates)
+                    ?.addOnCompleteListener {
+                        Toast.makeText(this, "¡Cuenta creada!", Toast.LENGTH_SHORT).show()
+                        goToMain()
+                    }
             }
-            .addOnFailureListener {
-                Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_LONG).show()
+            .addOnFailureListener { exception ->
+                val mensaje = when (exception) {
+                    is FirebaseAuthInvalidCredentialsException -> "El correo no es válido"
+                    else -> "Error al crear cuenta: ${exception.message}"
+                }
+                Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show()
+
                 buttonRegister.isEnabled = true
                 buttonRegister.text = "Crear Cuenta"
             }
@@ -143,24 +193,25 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
 
+
     // ── Pestañas ────────────────────────────────────────────────────────
 
     private fun showLoginTab() {
         layoutLogin.visibility    = View.VISIBLE
         layoutRegister.visibility = View.GONE
-        btnTabLogin.setBackgroundColor(getColor(R.color.purple_selected))
+        btnTabLogin.setBackgroundResource(R.drawable.tab_selected)
         btnTabLogin.setTextColor(getColor(android.R.color.white))
         btnTabRegister.setBackgroundColor(android.graphics.Color.TRANSPARENT)
-        btnTabRegister.setTextColor(0xCCFFFFFF.toInt())
+        btnTabRegister.setTextColor(android.graphics.Color.parseColor("#888888"))
     }
 
     private fun showRegisterTab() {
         layoutLogin.visibility    = View.GONE
         layoutRegister.visibility = View.VISIBLE
-        btnTabRegister.setBackgroundColor(getColor(R.color.purple_selected))
+        btnTabRegister.setBackgroundResource(R.drawable.tab_selected)
         btnTabRegister.setTextColor(getColor(android.R.color.white))
         btnTabLogin.setBackgroundColor(android.graphics.Color.TRANSPARENT)
-        btnTabLogin.setTextColor(0xCCFFFFFF.toInt())
+        btnTabLogin.setTextColor(android.graphics.Color.parseColor("#888888"))
     }
 
     // ── Validaciones ────────────────────────────────────────────────────
@@ -198,5 +249,56 @@ class LoginActivity : AppCompatActivity() {
             editTextConfirmPassword.error = "Las contraseñas no coinciden"; return false
         }
         return true
+    }
+
+    // Funcion para mostrar el boton de huella
+    private fun showBiometricButton() {
+        buttonBiometric.visibility = View.VISIBLE
+        buttonBiometric.setOnClickListener { showBiometricPrompt() }
+    }
+
+    // Función principal de la huella
+    private fun showBiometricPrompt() {
+        val executor = androidx.core.content.ContextCompat.getMainExecutor(this)
+        val biometricPrompt = androidx.biometric.BiometricPrompt(
+            this, executor,
+            object : androidx.biometric.BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationSucceeded(result: androidx.biometric.BiometricPrompt.AuthenticationResult) {
+                    val email    = sharedPrefs.getString(KEY_EMAIL, "") ?: ""
+                    val password = sharedPrefs.getString(KEY_PASSWORD, "") ?: ""
+                    if (email.isNotEmpty() && password.isNotEmpty()) {
+                        login(email, password)
+                    }
+                }
+                override fun onAuthenticationFailed() {
+                    Toast.makeText(this@LoginActivity, "Huella no reconocida", Toast.LENGTH_SHORT).show()
+                }
+            }
+        )
+
+        val promptInfo = androidx.biometric.BiometricPrompt.PromptInfo.Builder()
+            .setTitle("Inicio de sesion por biometria")
+            .setSubtitle("Usa tu huella para entrar")
+            .setNegativeButtonText("Usar contraseña")
+            .build()
+
+        biometricPrompt.authenticate(promptInfo)
+    }
+
+    // Funcion para preguntar si activa la huella
+    private fun askToEnableBiometric(email: String, password: String) {
+        com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+            .setTitle("Acceso rápido")
+            .setMessage("¿Quieres activar el acceso con huella dactilar?")
+            .setPositiveButton("Sí") { _, _ ->
+                sharedPrefs.edit()
+                    .putBoolean(KEY_BIOMETRIC, true)
+                    .putString(KEY_EMAIL, email)
+                    .putString(KEY_PASSWORD, password)
+                    .apply()
+                goToMain()
+            }
+            .setNegativeButton("No") { _, _ -> goToMain() }
+            .show()
     }
 }

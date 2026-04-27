@@ -26,6 +26,13 @@ class ProfileFragment : Fragment() {
         val auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
 
+        // Mostrar nombre del doctor en el Header
+        view.findViewById<TextView>(R.id.tvDoctorHeader).text =
+            getString(R.string.doctor_prefix, user?.displayName ?: "—")
+
+        // Mostrar nombre del usuario
+        view.findViewById<TextView>(R.id.tvUserName).text = user?.displayName ?: "nombre_medico"
+
         // Mostrar email del usuario
         view.findViewById<TextView>(R.id.tvUserEmail).text = user?.email ?: "—"
 
