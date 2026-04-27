@@ -31,10 +31,11 @@
             android:textColor="@color/text_primary"/>
 
         <TextView
+            android:id="@+id/tvUserNombre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
-            android:text="Doctor Juan Pérez"
+            android:text=""
             android:textColor="#6B7280"
             android:textSize="16sp" />
 
@@ -57,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
+            app:cardCornerRadius="12dp"
             app:cardElevation="6dp"
             app:cardBackgroundColor="@color/fondo_secundario">
 
@@ -76,6 +77,7 @@
                     android:paddingBottom="12dp" />
 
                 <TextView
+                    android:id="@+id/tvUserRol"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Médico"
@@ -100,7 +102,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            app:cardCornerRadius="16dp"
+            app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
             app:cardBackgroundColor="@color/fondo_secundario">
 
@@ -109,14 +111,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="20dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Datos sincronizados en Firebase"
-                    android:textSize="13sp"
-                    android:textColor="@color/text_primary"
-                    android:paddingBottom="6dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -138,7 +132,7 @@
             android:textColor="#FFFFFF"
             android:textAllCaps="false"
             app:backgroundTint="@color/btn_danger"
-            app:cornerRadius="12dp"
+            app:cornerRadius="8dp"
             app:elevation="10dp"/>
 
     </LinearLayout>

@@ -10,6 +10,7 @@ import com.example.historialclinico.data.database.UserProfile
 import com.example.historialclinico.data.models.Consulta
 import com.example.historialclinico.data.models.Expediente
 import com.example.historialclinico.data.models.Paciente
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -44,33 +45,58 @@ class AppViewModel : ViewModel() {
     val consultasPorPaciente: StateFlow<Map<String, List<Consulta>>> =
         _consultasPorPaciente.asStateFlow()
 
-    init {
+    // ── Control de inicio ──────────────────────────────────────────────
+    private var iniciado = false
+
+    /**
+     * Llamar desde MainActivity DESPUÉS de confirmar auth.currentUser != null.
+     * Reemplaza el init{} para evitar el crash "No hay sesión activa".
+     */
+    fun iniciarSync() {
+        if (iniciado) return
+        if (FirebaseAuth.getInstance().currentUser == null) return
+        iniciado = true
+
         viewModelScope.launch {
-            expRepo.listarFlow().collectLatest { lista ->
-                _expedientes.value = lista
-            }
+            try {
+                expRepo.listarFlow().collectLatest { lista ->
+                    _expedientes.value = lista
+                }
+            } catch (_: Exception) {}
         }
         viewModelScope.launch {
-            consultaRepo.listarTodasFlow().collectLatest { lista ->
-                _consultas.value = lista
-                _consultasPorPaciente.value = lista.groupBy { it.expedienteId }
-            }
+            try {
+                consultaRepo.listarTodasFlow().collectLatest { lista ->
+                    _consultas.value = lista
+                    _consultasPorPaciente.value = lista.groupBy { it.expedienteId }
+                }
+            } catch (_: Exception) {}
         }
         viewModelScope.launch {
             try { _perfil.value = userRepo.obtenerPerfil() } catch (_: Exception) {}
         }
         viewModelScope.launch {
-            migrarColoresAvatar()   // ← agrega esta línea
+            try { migrarColoresAvatar() } catch (_: Exception) {}
         }
     }
 
-    /** Convierte expedientes a Pacientes usando el color guardado en Firebase */
+    /** Llama esto al cerrar sesión para limpiar el caché y permitir reiniciar en el próximo login */
+    fun limpiarYReiniciar() {
+        iniciado = false
+        _expedientes.value          = emptyList()
+        _consultas.value            = emptyList()
+        _consultasPorPaciente.value = emptyMap()
+        _perfil.value               = null
+    }
+
+    // ── Funciones existentes — sin cambios ─────────────────────────────
+
     fun pacientesConColor(): List<Paciente> =
         _expedientes.value.map { exp ->
             val colorRes = if (exp.avatarColorIndex >= 0)
                 avatarColors[exp.avatarColorIndex % avatarColors.size]
             else
-                R.color.avatar_blue  // fallback para pacientes viejos sin índice
+                R.color.avatar_blue
             Paciente(
                 id             = exp.id,
                 nombre         = exp.nombre,
@@ -110,9 +136,8 @@ class AppViewModel : ViewModel() {
         }
     }
 
-    /** Asigna avatarColorIndex a pacientes que aún tienen -1 (creados antes del cambio) */
     private suspend fun migrarColoresAvatar() {
-        val lista = expRepo.listarUnaVez()  // lee una vez sin flow
+        val lista = expRepo.listarUnaVez()
         val sinColor = lista.filter { it.avatarColorIndex < 0 }
         sinColor.forEachIndexed { index, exp ->
             expRepo.actualizarColorIndex(exp.id, index % 5)
