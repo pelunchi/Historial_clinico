@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.historialclinico.R
@@ -14,12 +15,16 @@ import com.example.historialclinico.ui.fragments.InicioFragment
 import com.example.historialclinico.ui.fragments.PacientesFragment
 import com.example.historialclinico.ui.fragments.ProfileFragment
 import com.example.historialclinico.ui.fragments.VerConsultaFragment
+import com.example.historialclinico.ui.viewmodel.AppViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private var currentSelectedId: Int = -1
+
+    // Expuesto para que ProfileFragment llame limpiarYReiniciar() al cerrar sesión
+    val vm: AppViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +37,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         setContentView(R.layout.activity_main)
+
+        // Arrancar Firebase sync SOLO después de confirmar sesión activa
+        vm.iniciarSync()
+
         if (savedInstanceState == null) selectItem(R.id.nav_inicio)
 
         findViewById<LinearLayout>(R.id.navInicio).setOnClickListener    { selectItem(R.id.nav_inicio) }
@@ -60,7 +69,6 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
-    /** Abre ExpedienteFragment. Si pacienteId != null, carga expediente existente. */
     fun navegarAExpediente(pacienteId: String? = null) {
         val fragment = ExpedienteFragment().apply {
             arguments = Bundle().apply { putString("pacienteId", pacienteId) }
@@ -71,7 +79,6 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
-    /** Abre ConsultaFragment (formulario). Si consultaId != null, edita la existente. */
     fun navegarAConsulta(paciente: Paciente, consultaId: String? = null) {
         val fragment = ConsultaFragment.newInstance(paciente, consultaId)
         supportFragmentManager.beginTransaction()
@@ -80,7 +87,6 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
-    /** Abre VerConsultaFragment (modo lectura) para una consulta específica. */
     fun navegarAVerConsulta(paciente: Paciente, consultaId: String) {
         val fragment = VerConsultaFragment.newInstance(paciente, consultaId)
         supportFragmentManager.beginTransaction()
