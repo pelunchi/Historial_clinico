@@ -9,17 +9,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.example.historialclinico.R
-import com.example.historialclinico.data.database.UserRepository
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-    private val userRepo = UserRepository()
 
     // Pestañas
     private lateinit var btnTabLogin: Button
@@ -46,6 +41,7 @@ class LoginActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
+        // Si ya hay sesión activa, ir directo al home
         if (auth.currentUser != null) {
             goToMain()
             return
@@ -87,7 +83,7 @@ class LoginActivity : AppCompatActivity() {
             val email    = editTextEmailRegister.text.toString().trim()
             val password = editTextPasswordRegister.text.toString().trim()
             val confirm  = editTextConfirmPassword.text.toString().trim()
-            if (validateRegister(name, email, password, confirm)) register(name, email, password)
+            if (validateRegister(name, email, password, confirm)) register(email, password)
         }
 
         textViewForgotPassword.setOnClickListener {
@@ -124,16 +120,12 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
-    private fun register(nombre: String, email: String, password: String) {
+    private fun register(email: String, password: String) {
         buttonRegister.isEnabled = false
         buttonRegister.text = "Creando cuenta..."
 
         auth.createUserWithEmailAndPassword(email, password)
             .addOnSuccessListener {
-                // Guardar nombre del doctor en Firebase
-                CoroutineScope(Dispatchers.IO).launch {
-                    try { userRepo.guardarPerfil(nombre) } catch (_: Exception) {}
-                }
                 Toast.makeText(this, "¡Cuenta creada!", Toast.LENGTH_SHORT).show()
                 goToMain()
             }
@@ -174,18 +166,28 @@ class LoginActivity : AppCompatActivity() {
     // ── Validaciones ────────────────────────────────────────────────────
 
     private fun validateLogin(email: String, password: String): Boolean {
-        if (email.isEmpty()) { editTextEmail.error = "Ingresa tu correo"; return false }
+        if (email.isEmpty()) {
+            editTextEmail.error = "Ingresa tu correo"; return false
+        }
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             editTextEmail.error = "Correo inválido"; return false
         }
-        if (password.isEmpty()) { editTextPassword.error = "Ingresa tu contraseña"; return false }
-        if (password.length < 6) { editTextPassword.error = "Mínimo 6 caracteres"; return false }
+        if (password.isEmpty()) {
+            editTextPassword.error = "Ingresa tu contraseña"; return false
+        }
+        if (password.length < 6) {
+            editTextPassword.error = "Mínimo 6 caracteres"; return false
+        }
         return true
     }
 
     private fun validateRegister(name: String, email: String, password: String, confirm: String): Boolean {
-        if (name.isEmpty()) { editTextName.error = "Ingresa tu nombre"; return false }
-        if (email.isEmpty()) { editTextEmailRegister.error = "Ingresa tu correo"; return false }
+        if (name.isEmpty()) {
+            editTextName.error = "Ingresa tu nombre"; return false
+        }
+        if (email.isEmpty()) {
+            editTextEmailRegister.error = "Ingresa tu correo"; return false
+        }
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             editTextEmailRegister.error = "Correo inválido"; return false
         }
