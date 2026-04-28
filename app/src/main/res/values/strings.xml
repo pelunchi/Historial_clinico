@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Login Activity -->
     <string name="app_name">Historial Clínico</string>
+    <string name="app_subtitle">Sistema de expedientes médicos</string>
+    <string name="tab_login">Iniciar Sesión</string>
+    <string name="tab_register">Registrarse</string>
+
+    <!-- Card Login -->
+    <string name="hint_email">Correo electrónico</string>
+    <string name="hint_password">Contraseña</string>
+    <string name="btn_biometric">Entrar con huella</string>
+    <string name="btn_login">Iniciar Sesión</string>
+    <string name="forgot_password">¿Olvidaste tu contraseña?</string>
+
+    <!-- Card Registro -->
+    <string name="hint_name">Nombre de usuario</string>
+    <string name="hint_confirm_password">Confirmar contraseña</string>
+    <string name="btn_register">Crear Cuenta</string>
+
+    <!-- Content Descriptions -->
+    <string name="logo_description">Logo hospital</string>
+
+    <!-- Doctor prefix -->
     <string name="doctor_prefix">Dr. %s</string>
 </resources>

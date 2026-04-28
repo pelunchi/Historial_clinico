@@ -36,7 +36,7 @@ class ProfileFragment : Fragment() {
         // Nombre desde caché del ViewModel — sin esperar red
         viewLifecycleOwner.lifecycleScope.launch {
             vm.perfil.collectLatest { perfil ->
-                val nombre = if (!perfil?.nombre.isNullOrBlank()) "Dr. ${perfil!!.nombre}" else "Doctor"
+                val nombre = if (!perfil?.nombre.isNullOrBlank()) "Dr. ${perfil.nombre}" else "Doctor"
                 view.findViewById<TextView>(R.id.tvUserNombre).text = nombre
                 view.findViewById<TextView>(R.id.tvUserRol).text    = nombre
             }
