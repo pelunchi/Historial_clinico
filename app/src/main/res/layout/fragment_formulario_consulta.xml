@@ -6,461 +6,461 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/fondo_secundario">
 
-<!-- Header -->
-<LinearLayout android:id="@+id/header_perfil_nuevo_paciente"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:paddingHorizontal="16dp"
-    android:paddingTop="35dp"
-    android:paddingBottom="8dp"
-    android:elevation="4dp"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent">
-
-    <ImageButton
-        android:id="@+id/btnBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow_back"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Volver"
-        android:padding="4dp"/>
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Nueva consulta"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:textColor="#1A1A1A"
-        android:layout_gravity="center"
-        android:layout_marginStart="8dp"/>
-</LinearLayout>
-
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/fondo_gris_claro"
-    android:layout_width="0dp"
-    android:layout_height="0dp"
-
-    android:paddingBottom="50dp"
-
-    app:layout_constraintTop_toBottomOf="@id/header_perfil_nuevo_paciente"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent">
-
-    <LinearLayout
+    <!-- Header -->
+    <LinearLayout android:id="@+id/header_perfil_nuevo_paciente"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="35dp"
+        android:paddingBottom="8dp"
+        android:elevation="4dp"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Volver"
+            android:padding="4dp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Nueva consulta"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#1A1A1A"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:background="@color/fondo_gris_claro"
-        android:paddingBottom="24dp">
+        android:layout_width="0dp"
+        android:layout_height="0dp"
 
-        <!-- ═══ Informacion de consulta ═══ -->
-        <androidx.cardview.widget.CardView
+        android:paddingBottom="50dp"
+
+        app:layout_constraintTop_toBottomOf="@id/header_perfil_nuevo_paciente"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="18dp"
-            android:layout_marginBottom="12dp"
+            android:orientation="vertical"
+            android:background="@color/fondo_gris_claro"
+            android:paddingBottom="24dp">
 
-            app:cardCornerRadius="8dp"
-            app:cardElevation="6dp"
-            >
-
-            <LinearLayout
+            <!-- ═══ Informacion de consulta ═══ -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/fondo_expediente_ficha_identificacion">
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="12dp"
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/section_ficha"
-                    android:text="Informacion de consulta"
-                    android:textColor="#FFFFFF"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="16dp"
-                    android:paddingTop="12dp"
-                    android:paddingBottom="12dp" />
+                app:cardCornerRadius="8dp"
+                app:cardElevation="6dp"
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingHorizontal="20dp"
-                    android:paddingTop="14dp"
-                    android:paddingBottom="20dp">
+                    android:background="@drawable/fondo_formulario_consulta">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/section_ic"
+                        android:text="Informacion de consulta"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="16dp"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="2"
-                        android:layout_marginBottom="8dp">
+                        android:orientation="vertical"
+                        android:paddingHorizontal="20dp"
+                        android:paddingTop="14dp"
+                        android:paddingBottom="20dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="2"
+                            android:layout_marginBottom="8dp">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilFechaConsulta"
+                                style="@style/CustomInput.InfoConsultaUnclickeable"
+                                android:layout_width="40dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginEnd="6dp"
+                                android:hint="Fecha de consulta">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etFechaConsulta"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:focusable="false"
+                                    android:focusableInTouchMode="false"
+                                    android:clickable="false"
+                                    android:longClickable="false"
+                                    android:cursorVisible="false"
+                                    android:textIsSelectable="false"
+                                    android:inputType="none"/>
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilHoraConsulta"
+                                style="@style/CustomInput.InfoConsultaUnclickeable"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:hint="Hora">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etHoraConsulta"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:focusable="false"
+                                    android:focusableInTouchMode="false"
+                                    android:clickable="false"
+                                    android:longClickable="false"
+                                    android:cursorVisible="false"
+                                    android:textIsSelectable="false"
+                                    android:inputType="none"/>
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/tilFechaConsulta"
-                            style="@style/CustomInput.FichaUnclickeable"
-                            android:layout_width="40dp"
+                            android:id="@+id/tilMotivoConsulta"
+                            style="@style/CustomInput.InfoConsulta"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="6dp"
-                            android:hint="Fecha de consulta">
+                            android:layout_marginBottom="8dp"
+                            android:hint="Motivo de visita"
+                            app:helperText="Esta información se mostrará como titulo"
+                            app:helperTextEnabled="true">
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etFechaConsulta"
+                                android:id="@+id/etMotivoConsulta"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:focusable="false"
-                                android:focusableInTouchMode="false"
-                                android:clickable="false"
-                                android:longClickable="false"
-                                android:cursorVisible="false"
-                                android:textIsSelectable="false"
-                                android:inputType="none"/>
+                                android:inputType="textMultiLine|textCapSentences"
+                                android:minLines="2"
+                                android:gravity="top|start"/>
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/tilHoraConsulta"
-                            style="@style/CustomInput.FichaUnclickeable"
-                            android:layout_width="0dp"
+                            android:id="@+id/tilSintomas"
+                            style="@style/CustomInput.InfoConsulta"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:hint="Hora">
+                            android:layout_marginBottom="8dp"
+                            android:hint="Sintomas"
+                            app:helperText="Sintomas que describe el paciente"
+                            app:helperTextEnabled="true">
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etHoraConsulta"
+                                android:id="@+id/etSintomas"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:focusable="false"
-                                android:focusableInTouchMode="false"
-                                android:clickable="false"
-                                android:longClickable="false"
-                                android:cursorVisible="false"
-                                android:textIsSelectable="false"
-                                android:inputType="none"/>
+                                android:inputType="textMultiLine|textCapSentences"
+                                android:minLines="2"
+                                android:gravity="top|start"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilDiagnostico"
+                            style="@style/CustomInput.InfoConsulta"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:hint="Diagnóstico">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etDiagnostico"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textMultiLine|textCapSentences"
+                                android:minLines="2"
+                                android:gravity="top|start"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilNotasConsulta"
+                            style="@style/CustomInput.InfoConsulta"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:hint="Notas del médico">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etResumenConsulta"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textMultiLine|textCapSentences"
+                                android:minLines="2"
+                                android:gravity="top|start"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilIndicaciones"
+                            style="@style/CustomInput.InfoConsulta"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:hint="Indicaciones">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etIndicaciones"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textMultiLine|textCapSentences"
+                                android:minLines="2"
+                                android:gravity="top|start"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilReceta"
+                            style="@style/CustomInput.InfoConsulta"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:hint="Receta">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etReceta"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textMultiLine|textCapSentences"
+                                android:minLines="2"
+                                android:gravity="top|start"/>
                         </com.google.android.material.textfield.TextInputLayout>
 
                     </LinearLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilMotivoConsulta"
-                        style="@style/CustomInput.Ficha"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:hint="Motivo de visita"
-                        app:helperText="Esta información se mostrará como titulo"
-                        app:helperTextEnabled="true">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etMotivoConsulta"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:minLines="2"
-                            android:gravity="top|start"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilSintomas"
-                        style="@style/CustomInput.Ficha"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:hint="Sintomas"
-                        app:helperText="Sintomas que describe el paciente"
-                        app:helperTextEnabled="true">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etSintomas"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:minLines="2"
-                            android:gravity="top|start"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilDiagnostico"
-                        style="@style/CustomInput.Ficha"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:hint="Diagnóstico">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etDiagnostico"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:minLines="2"
-                            android:gravity="top|start"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilNotasConsulta"
-                        style="@style/CustomInput.Ficha"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:hint="Notas del médico">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etResumenConsulta"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:minLines="2"
-                            android:gravity="top|start"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilIndicaciones"
-                        style="@style/CustomInput.Ficha"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:hint="Indicaciones">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etIndicaciones"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:minLines="2"
-                            android:gravity="top|start"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilReceta"
-                        style="@style/CustomInput.Ficha"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:hint="Receta">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etReceta"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:minLines="2"
-                            android:gravity="top|start"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
                 </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-        <!-- ═══ EF ═══ -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="6dp"
-            app:cardBackgroundColor="#FFFFFF">
-
-            <LinearLayout
+            </androidx.cardview.widget.CardView>
+            <!-- ═══ EF ═══ -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/fondo_expediente_exploracion_fisica">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/section_da"
-                    android:paddingStart="16dp"
-                    android:paddingTop="12dp"
-                    android:paddingEnd="16dp"
-                    android:paddingBottom="12dp"
-                    android:text="📊  EF — Exploración Física"
-                    android:textColor="#FFFFFF"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="150dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="6dp"
+                app:cardBackgroundColor="#FFFFFF">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingHorizontal="20dp"
-                    android:paddingTop="14dp"
-                    android:paddingBottom="20dp">
+                    android:background="@drawable/fondo_expediente_exploracion_fisica">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/section_da"
+                        android:paddingStart="16dp"
+                        android:paddingTop="12dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="12dp"
+                        android:text="📊  EF — Exploración Física"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="2"
-                        android:layout_marginBottom="8dp">
+                        android:orientation="vertical"
+                        android:paddingHorizontal="20dp"
+                        android:paddingTop="14dp"
+                        android:paddingBottom="20dp">
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/tilEfTallaConsulta"
-                            style="@style/CustomInput.EF"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="6dp"
-                            android:hint="Talla (cm)">
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etEfTallaConsulta"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="numberDecimal"/>
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/tilEfPesoConsulta"
-                            style="@style/CustomInput.EF"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:hint="Peso (kg)">
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etEfPesoConsulta"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="numberDecimal"/>
-                        </com.google.android.material.textfield.TextInputLayout>
-                    </LinearLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilEfImcConsulta"
-                        style="@style/CustomInput.IMC"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:hint="IMC (automático)"
-                        app:helperTextTextColor="@color/section_da"
-                        app:helperText="Se calcula con talla y peso"
-                        app:helperTextEnabled="true">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etEfImcConsulta"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:focusable="false"
-                            android:focusableInTouchMode="false"
-                            android:clickable="false"
-                            android:longClickable="false"
-                            android:cursorVisible="false"
-                            android:textIsSelectable="false"
-                            android:inputType="none"/>
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:orientation="horizontal"
+                            android:weightSum="2"
+                            android:layout_marginBottom="8dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="2"
-                        android:layout_marginBottom="8dp">
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilEfTallaConsulta"
+                                style="@style/CustomInput.EF"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginEnd="6dp"
+                                android:hint="Talla (cm)">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etEfTallaConsulta"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="numberDecimal"/>
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilEfPesoConsulta"
+                                style="@style/CustomInput.EF"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:hint="Peso (kg)">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etEfPesoConsulta"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="numberDecimal"/>
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/tilEfPaConsulta"
-                            style="@style/CustomInput.EF"
-                            android:layout_width="0dp"
+                            android:id="@+id/tilEfImcConsulta"
+                            style="@style/CustomInput.IMC"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="6dp"
-                            android:hint="Presión (mmHg)">
+                            android:layout_marginBottom="8dp"
+                            android:hint="IMC (automático)"
+                            app:helperTextTextColor="@color/section_da"
+                            app:helperText="Se calcula con talla y peso"
+                            app:helperTextEnabled="true">
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etEfPaConsulta"
+                                android:id="@+id/etEfImcConsulta"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:inputType="text"/>
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:clickable="false"
+                                android:longClickable="false"
+                                android:cursorVisible="false"
+                                android:textIsSelectable="false"
+                                android:inputType="none"/>
                         </com.google.android.material.textfield.TextInputLayout>
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/tilEfFcConsulta"
-                            style="@style/CustomInput.EF"
-                            android:layout_width="0dp"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:hint="FC (lpm)">
+                            android:orientation="horizontal"
+                            android:weightSum="2"
+                            android:layout_marginBottom="8dp">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilEfPaConsulta"
+                                style="@style/CustomInput.EF"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginEnd="6dp"
+                                android:hint="Presión (mmHg)">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etEfPaConsulta"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="text"/>
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilEfFcConsulta"
+                                style="@style/CustomInput.EF"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:hint="FC (lpm)">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etEfFcConsulta"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="number"/>
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="2"
+                            android:layout_marginBottom="8dp">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilEfTempConsulta"
+                                style="@style/CustomInput.EF"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginEnd="6dp"
+                                android:hint="Temp (°C)">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etEfTempConsulta"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="numberDecimal"/>
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilEfSpo2Consulta"
+                                style="@style/CustomInput.EF"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:hint="SpO₂ (%)">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etEfSpo2Consulta"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="numberDecimal"/>
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilEfFrConsulta"
+                            style="@style/CustomInput.EF"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:hint="Frec. Respiratoria (rpm)">
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etEfFcConsulta"
+                                android:id="@+id/etEfFr"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="number"/>
                         </com.google.android.material.textfield.TextInputLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="2"
-                        android:layout_marginBottom="8dp">
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/tilEfTempConsulta"
+                            android:id="@+id/tilEfObsConsulta"
                             style="@style/CustomInput.EF"
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="6dp"
-                            android:hint="Temp (°C)">
+                            android:hint="Observaciones físicas">
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etEfTempConsulta"
+                                android:id="@+id/etEfObsConsulta"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:inputType="numberDecimal"/>
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/tilEfSpo2Consulta"
-                            style="@style/CustomInput.EF"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:hint="SpO₂ (%)">
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etEfSpo2Consulta"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="numberDecimal"/>
+                                android:inputType="textMultiLine|textCapSentences"
+                                android:minLines="3"
+                                android:gravity="top|start"/>
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilEfFrConsulta"
-                        style="@style/CustomInput.EF"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:hint="Frec. Respiratoria (rpm)">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etEfFr"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="number"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilEfObsConsulta"
-                        style="@style/CustomInput.EF"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Observaciones físicas">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etEfObsConsulta"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:minLines="3"
-                            android:gravity="top|start"/>
-                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-    </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 

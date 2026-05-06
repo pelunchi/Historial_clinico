@@ -65,6 +65,12 @@ class PacientesFragment : Fragment() {
             onItemClick     = { paciente ->
                 val fragment = PacientePerfilFragment.newInstance(paciente)
                 parentFragmentManager.beginTransaction()
+                    .setCustomAnimations(
+                        R.anim.slide_in_right,
+                        R.anim.slide_out_left,
+                        R.anim.slide_in_left,
+                        R.anim.slide_out_right
+                    )
                     .replace(R.id.fragmentContainer, fragment)
                     .addToBackStack(null)
                     .commit()

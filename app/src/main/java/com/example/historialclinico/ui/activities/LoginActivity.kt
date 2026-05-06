@@ -199,18 +199,30 @@ class LoginActivity : AppCompatActivity() {
     private fun showLoginTab() {
         layoutLogin.visibility    = View.VISIBLE
         layoutRegister.visibility = View.GONE
+
+        // Tab activo: Iniciar Sesión
+        btnTabLogin.backgroundTintList = null
         btnTabLogin.setBackgroundResource(R.drawable.tab_selected)
-        btnTabLogin.setTextColor(getColor(android.R.color.white))
-        btnTabRegister.setBackgroundColor(android.graphics.Color.TRANSPARENT)
+        btnTabLogin.setTextColor(android.graphics.Color.WHITE)
+
+        // Tab inactivo: Registrarse
+        btnTabRegister.backgroundTintList = null
+        btnTabRegister.setBackgroundResource(android.R.color.transparent)
         btnTabRegister.setTextColor(android.graphics.Color.parseColor("#888888"))
     }
 
     private fun showRegisterTab() {
         layoutLogin.visibility    = View.GONE
         layoutRegister.visibility = View.VISIBLE
+
+        // Tab activo: Registrarse
+        btnTabRegister.backgroundTintList = null
         btnTabRegister.setBackgroundResource(R.drawable.tab_selected)
-        btnTabRegister.setTextColor(getColor(android.R.color.white))
-        btnTabLogin.setBackgroundColor(android.graphics.Color.TRANSPARENT)
+        btnTabRegister.setTextColor(android.graphics.Color.WHITE)
+
+        // Tab inactivo: Iniciar Sesión
+        btnTabLogin.backgroundTintList = null
+        btnTabLogin.setBackgroundResource(android.R.color.transparent)
         btnTabLogin.setTextColor(android.graphics.Color.parseColor("#888888"))
     }
 

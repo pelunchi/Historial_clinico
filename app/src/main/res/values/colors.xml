@@ -18,6 +18,7 @@
     <color name="nav_active">#1D9E75</color>
     <color name="primary1">#378ADD</color>
     <color name="primary2">#7F77DD</color>
+    <color name="header_fragmentos">#B2E3EE</color>
 
     <!-- Colores de sección para encabezados de CardView -->
     <color name="section_ficha">#4DB9EF</color>
@@ -27,12 +28,20 @@
     <color name="fondo_section_da">#FFF8E1</color>
     <color name="section_da">#F3AE69</color>
 
+    <!-- Colores de consultas -->
+    <color name="section_ic">#70C3A2</color> <!-- 73DEA0 -->
+    <color name="fondo_section_ic">#EFFFF6</color>
+
+    <!-- Texto ver consulta -->
+    <color name="texto_ver_consulta">#439775</color>
+
+
     <!-- Estado -->
     <color name="green_completed">#4CAF50</color>
     <color name="red_failed">#D32F2F</color>
 
     <!-- Primary -->
-    <color name="primary">#2ECC71</color>
+    <color name="primary">#1F2937</color>
     <color name="primary_dark">#27AE60</color>
     <color name="primary_light">#A8E6CF</color>
     <color name="primary_bg">#FFFFFF</color>
@@ -47,9 +56,6 @@
     <color name="text_white">#FFFFFF</color>
     <color name="text_green">#27AE60</color>
     <color name="text_red">#E74C3C</color>
-
-    <!-- Texto ver consulta -->
-    <color name="texto_ver_consulta">#888888</color>
 
 
     <!-- Fondos principales -->

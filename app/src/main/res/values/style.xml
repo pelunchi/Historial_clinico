@@ -150,4 +150,29 @@
         <item name="hintTextColor">@color/texto_formulario_claro</item>
     </style>
 
+    <!-- Inputs infoConsulta de fecha y hora -->
+    <style name="CustomInput.InfoConsultaUnclickeable" parent="CustomInput">
+        <!-- Fondo diferente -->
+        <item name="boxBackgroundColor">@color/fondo_section_ic</item>
+        <!-- Borde diferente -->
+        <item name="boxStrokeColor">@color/stroke_input_info_consulta_unclickeable</item>
+    </style>
+
+    <!-- Inputs infoConsulta -->
+    <style name="CustomInput.InfoConsulta" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <!-- Fondo -->
+        <item name="boxBackgroundColor">@color/fondo_gris_claro</item>
+        <!-- Borde dinámico -->
+        <item name="boxStrokeColor">@color/stroke_input_info_consulta</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <!-- Borde redondeado -->
+        <item name="boxCornerRadiusTopStart">8dp</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="boxCornerRadiusBottomStart">8dp</item>
+        <item name="boxCornerRadiusBottomEnd">8dp</item>
+        <!-- Texto -->
+        <item name="hintTextColor">@color/texto_formulario_claro</item>
+    </style>
+
 </resources>

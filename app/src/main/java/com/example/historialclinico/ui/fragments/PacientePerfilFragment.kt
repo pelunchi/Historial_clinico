@@ -78,16 +78,27 @@ class PacientePerfilFragment : Fragment() {
 
         // Expediente — del caché, sin esperar red
         viewLifecycleOwner.lifecycleScope.launch {
-            vm.expedientes.collectLatest { lista ->
-                val exp = lista.find { it.id == paciente.id } ?: return@collectLatest
-                actualizarSubtitulo(view, exp.edad, exp.sexo, exp.tipoSangre)
-                llenarDatosExpediente(view, exp)
+            viewLifecycleOwner.lifecycleScope.launch {
+                vm.expedientes.collectLatest { lista ->
+                    val exp = lista.find { it.id == paciente.id } ?: return@collectLatest
+                    actualizarSubtitulo(view, exp.edad, exp.sexo, exp.tipoSangre)
+                    llenarDatosExpediente(view, exp)
 
-                // Actualizar avatar con el color e iniciales correctos desde Firebase
-                val pacienteActualizado = vm.pacienteConColor(exp.id)
-                if (pacienteActualizado != null) {
-                    paciente = pacienteActualizado   // ← actualiza la referencia local
-                    llenarHeader(view)
+                    // Sobreescribir talla/peso/IMC con la última consulta SOLO si
+                    // la consulta es más reciente que la última edición manual del expediente
+                    val ultimaConsulta = vm.datosFisicosUltimaConsulta(paciente.id)
+                    if (ultimaConsulta != null &&
+                        ultimaConsulta.timestamp > exp.fechaActualizacion) {
+                        set(view, R.id.tvAltura, "${ultimaConsulta.talla} cm")
+                        set(view, R.id.tvPeso,   "${ultimaConsulta.peso} kg")
+                        set(view, R.id.tvIMC,    String.format("%.1f  (${exp.copy(efImc = ultimaConsulta.imc).categoriaImc()})", ultimaConsulta.imc))
+                    }
+
+                    val pacienteActualizado = vm.pacienteConColor(exp.id)
+                    if (pacienteActualizado != null) {
+                        paciente = pacienteActualizado
+                        llenarHeader(view)
+                    }
                 }
             }
         }

@@ -90,6 +90,12 @@ class MainActivity : AppCompatActivity() {
     fun navegarAVerConsulta(paciente: Paciente, consultaId: String) {
         val fragment = VerConsultaFragment.newInstance(paciente, consultaId)
         supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_in_right,
+                R.anim.slide_out_left,
+                R.anim.slide_in_left,
+                R.anim.slide_out_right
+            )
             .replace(R.id.fragmentContainer, fragment)
             .addToBackStack("ver_consulta")
             .commit()
@@ -115,4 +121,5 @@ class MainActivity : AppCompatActivity() {
         labels[itemId]?.setTextColor(active)
         icons[itemId]?.setTextColor(active)
     }
+
 }

@@ -31,5 +31,15 @@ data class Consulta(
     var efTemperatura: Double = 0.0,
     var efSpo2: Double = 0.0,
     var efObservaciones: String = ""
-)
+) {
+    fun categoriaImc(): String = when {
+        efImc <= 0   -> "—"
+        efImc < 18.5 -> "Bajo peso"
+        efImc < 25.0 -> "Peso normal"
+        efImc < 30.0 -> "Sobrepeso"
+        efImc < 35.0 -> "Obesidad I"
+        efImc < 40.0 -> "Obesidad II"
+        else          -> "Obesidad III"
+    }
+}
 

@@ -142,7 +142,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@drawable/fondo_info_personal"
+                android:background="@drawable/fondo_info_consulta"
                 android:padding="12dp"
                 android:layout_marginBottom="16dp">
 
@@ -170,37 +170,37 @@
                 </LinearLayout>
 
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="Motivo de visita" android:textSize="14sp" android:textColor="#888888"/>
+                    android:text="Motivo de visita" android:textSize="14sp" android:textColor="@color/texto_ver_consulta"/>
                 <TextView android:id="@+id/tvMotivoConsulta" android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:layout_marginBottom="8dp"
                     android:text="" android:textColor="#1A1A1A" android:textSize="14sp"/>
 
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="Síntomas" android:textSize="14sp" android:textColor="#888888"/>
+                    android:text="Síntomas" android:textSize="14sp" android:textColor="@color/texto_ver_consulta"/>
                 <TextView android:id="@+id/tvSintomasConsulta" android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:layout_marginBottom="8dp"
                     android:text="" android:textSize="14sp" android:textColor="#1A1A1A"/>
 
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="Diagnóstico" android:textSize="14sp" android:textColor="#888888"/>
+                    android:text="Diagnóstico" android:textSize="14sp" android:textColor="@color/texto_ver_consulta"/>
                 <TextView android:id="@+id/tvDiagnosticoConsulta" android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:layout_marginBottom="8dp"
                     android:text="" android:textSize="14sp" android:textColor="#1A1A1A"/>
 
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="Notas del médico" android:textSize="14sp" android:textColor="#888888"/>
+                    android:text="Notas del médico" android:textSize="14sp" android:textColor="@color/texto_ver_consulta"/>
                 <TextView android:id="@+id/tvNotasConsulta" android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:layout_marginBottom="8dp"
                     android:text="" android:textSize="14sp" android:textColor="#1A1A1A"/>
 
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="Indicaciones" android:textSize="14sp" android:textColor="#888888"/>
+                    android:text="Indicaciones" android:textSize="14sp" android:textColor="@color/texto_ver_consulta"/>
                 <TextView android:id="@+id/tvIndicacionesConsulta" android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:layout_marginBottom="8dp"
                     android:text="" android:textSize="14sp" android:textColor="#1A1A1A"/>
 
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="Receta" android:textSize="14sp" android:textColor="#888888"/>
+                    android:text="Receta" android:textSize="14sp" android:textColor="@color/texto_ver_consulta"/>
                 <TextView android:id="@+id/tvRecetaConsulta" android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:text=""
                     android:textSize="14sp" android:textColor="#1A1A1A"/>

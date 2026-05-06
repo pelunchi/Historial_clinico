@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 class AppViewModel : ViewModel() {
 
@@ -60,7 +61,13 @@ class AppViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 expRepo.listarFlow().collectLatest { lista ->
-                    _expedientes.value = lista
+                    // Si el expediente tiene fecha de nacimiento, recalcular la edad
+                    // automáticamente cada vez que llegan datos de Firebase
+                    val listaActualizada = lista.map { exp ->
+                        val edadCalculada = calcularEdadDesde(exp.fechaNacimiento)
+                        if (edadCalculada > 0) exp.copy(edad = edadCalculada) else exp
+                    }
+                    _expedientes.value = listaActualizada
                 }
             } catch (_: Exception) {}
         }
@@ -87,6 +94,39 @@ class AppViewModel : ViewModel() {
         _consultas.value            = emptyList()
         _consultasPorPaciente.value = emptyMap()
         _perfil.value               = null
+    }
+
+    // ── Cálculo de edad desde fecha de nacimiento ──────────────────────
+
+    /**
+     * Calcula la edad en años cumplidos a partir de una fecha "dd/MM/yyyy".
+     * Devuelve 0 si la fecha está vacía, es inválida, o es futura.
+     * Se puede llamar desde cualquier Fragment para recalcular en tiempo real.
+     */
+    fun calcularEdadDesde(fechaNacimiento: String): Int {
+        if (fechaNacimiento.isBlank()) return 0
+        val partes = fechaNacimiento.split("/")
+        if (partes.size != 3) return 0
+        val dia  = partes[0].toIntOrNull() ?: return 0
+        val mes  = partes[1].toIntOrNull() ?: return 0
+        val anio = partes[2].toIntOrNull() ?: return 0
+        if (dia <= 0 || mes <= 0 || anio <= 0) return 0
+
+        val hoy = Calendar.getInstance()
+        val nacimiento = Calendar.getInstance().apply {
+            set(anio, mes - 1, dia, 0, 0, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        if (nacimiento.after(hoy)) return 0
+
+        var edad = hoy.get(Calendar.YEAR) - nacimiento.get(Calendar.YEAR)
+        // Restar 1 si todavía no ha pasado el cumpleaños este año
+        if (hoy.get(Calendar.MONTH) < nacimiento.get(Calendar.MONTH) ||
+            (hoy.get(Calendar.MONTH) == nacimiento.get(Calendar.MONTH) &&
+                    hoy.get(Calendar.DAY_OF_MONTH) < nacimiento.get(Calendar.DAY_OF_MONTH))) {
+            edad--
+        }
+        return if (edad < 0) 0 else edad
     }
 
     // ── Funciones existentes — sin cambios ─────────────────────────────
@@ -124,6 +164,27 @@ class AppViewModel : ViewModel() {
         viewModelScope.launch {
             try { _perfil.value = userRepo.obtenerPerfil() } catch (_: Exception) {}
         }
+    }
+
+    /**
+     * Retorna talla, peso, IMC y timestamp de la consulta más reciente que tenga datos físicos.
+     * El timestamp permite al llamador comparar si la consulta es más reciente que la última
+     * edición manual del expediente (exp.fechaActualizacion) antes de sobrescribir.
+     * Retorna null si no hay consultas o si ninguna tiene datos físicos completos.
+     */
+    data class DatosFisicos(
+        val talla: Double,
+        val peso: Double,
+        val imc: Double,
+        val timestamp: Long
+    )
+
+    fun datosFisicosUltimaConsulta(pacienteId: String): DatosFisicos? {
+        val consultas = _consultasPorPaciente.value[pacienteId] ?: return null
+        val ultima = consultas.maxByOrNull { it.fechaTimestamp } ?: return null
+        return if (ultima.efTalla > 0 && ultima.efPeso > 0 && ultima.efImc > 0)
+            DatosFisicos(ultima.efTalla, ultima.efPeso, ultima.efImc, ultima.fechaTimestamp)
+        else null
     }
 
     fun eliminarConsulta(expedienteId: String, consultaId: String) {

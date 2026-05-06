@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/fondo_principal">
+    android:background="@drawable/gradient_fragmentos">
 
     <!-- Header -->
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#D6F8EC"
+
         android:orientation="vertical"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"

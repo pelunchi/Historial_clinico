@@ -106,7 +106,9 @@ class VerConsultaFragment : Fragment() {
         set(view, R.id.tvRecetaConsulta,   c.receta.ifBlank { "—" })
         set(view, R.id.tvAlturaConsulta,   if (c.efTalla > 0) "${c.efTalla} cm" else "—")
         set(view, R.id.tvPesoConsulta,     if (c.efPeso  > 0) "${c.efPeso} kg"  else "—")
-        set(view, R.id.tvIMCConsulta,      if (c.efImc   > 0) String.format("%.1f", c.efImc) else "—")
+        set(view, R.id.tvIMCConsulta,      if (c.efImc   > 0)
+            String.format("%.1f  (${c.categoriaImc()})", c.efImc) else "—")
+
         set(view, R.id.tvPresionConsulta,  c.efPresionArterial.ifBlank { "—" })
         set(view, R.id.tvFCConsulta,       if (c.efFrecCardiaca    > 0) "${c.efFrecCardiaca} lpm" else "—")
         set(view, R.id.tvTempConsulta,     if (c.efTemperatura     > 0) "${c.efTemperatura} °C"   else "—")

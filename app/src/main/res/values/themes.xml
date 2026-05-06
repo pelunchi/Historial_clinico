@@ -5,7 +5,9 @@
         <item name="android:windowBackground">@color/fondo_principal</item>
         <item name="android:statusBarColor">@color/fondo_principal</item>
 
-        <item name="colorPrimary">@color/borde_formulario_oscuro</item>
+        <item name="colorPrimary">#202020</item>
         <item name="colorSecondary">@color/primary</item>
+
+
     </style>
 </resources>
